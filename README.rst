@@ -5,7 +5,7 @@
 https://coveralls.io/github/metno/pysurfex-scheduler
 
 Python abstraction layer for a scheduling system like Ecflow
-=======================================================
+================================================================
 
 See online documentation in https://metno.github.io/pysurfex-scheduler/
 
