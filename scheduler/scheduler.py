@@ -33,9 +33,9 @@ class Server(ABC):
     def begin_suite(self, suite_name):
         raise NotImplementedError
 
-    def start_suite(self, suite, begin=True):
-        def_file = suite.def_file
-        suite_name = suite.name
+    def start_suite(self, defs, begin=True):
+        def_file = defs.suite.def_file
+        suite_name = defs.suite.name
         self.start_server()
         self.replace(suite_name, def_file)
         if begin:

@@ -15,7 +15,7 @@ class SuiteDefinition(object):
         if ecflow is None:
             raise Exception("Ecflow not loaded properly")
 
-        self.name = suite_name
+        name = suite_name
         self.joboutdir = joboutdir
         if ecf_include is None:
             ecf_include = ecf_files
@@ -92,7 +92,7 @@ class SuiteDefinition(object):
 
         ]
 
-        self.suite = EcflowSuite(self.name, def_file=def_file, variables=variables)
+        self.suite = EcflowSuite(name, def_file=def_file, variables=variables)
 
     def save_as_defs(self):
         self.suite.save_as_defs()
