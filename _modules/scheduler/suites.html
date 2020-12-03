@@ -53,7 +53,7 @@
         <span class="k">if</span> <span class="n">ecflow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ecflow not loaded properly&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">suite_name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">suite_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">joboutdir</span> <span class="o">=</span> <span class="n">joboutdir</span>
         <span class="k">if</span> <span class="n">ecf_include</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ecf_include</span> <span class="o">=</span> <span class="n">ecf_files</span>
@@ -130,7 +130,7 @@
 
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span> <span class="o">=</span> <span class="n">EcflowSuite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">def_file</span><span class="o">=</span><span class="n">def_file</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span> <span class="o">=</span> <span class="n">EcflowSuite</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">def_file</span><span class="o">=</span><span class="n">def_file</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">save_as_defs</span><span class="p">()</span></div>
