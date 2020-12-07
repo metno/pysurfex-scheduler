@@ -145,6 +145,15 @@ class EcflowNode(object):
                 raise Exception("Triggers must be a Triggers object")
         self.triggers = triggers
 
+        if "def_status" in kwargs:
+            def_status = kwargs["def_status"]
+            if isinstance(def_status, str):
+                self.ecf_node.add_defstatus(ecflow.Defstatus(def_status))
+            elif isinstance(def_status, ecflow.Defstatus):
+                self.ecf_node.add_defstatus(def_status)
+            else:
+                raise Exception("Unknown defstatus")
+
     def add_part_trigger(self, triggers, mode=True):
         if isinstance(triggers, EcflowSuiteTriggers):
             if triggers.trigger_string is not None:
