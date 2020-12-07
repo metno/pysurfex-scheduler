@@ -183,6 +183,15 @@
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Triggers must be a Triggers object&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="n">triggers</span>
 
+        <span class="k">if</span> <span class="s2">&quot;def_status&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">def_status</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;def_status&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">def_status</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ecf_node</span><span class="o">.</span><span class="n">add_defstatus</span><span class="p">(</span><span class="n">ecflow</span><span class="o">.</span><span class="n">Defstatus</span><span class="p">(</span><span class="n">def_status</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">def_status</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Defstatus</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ecf_node</span><span class="o">.</span><span class="n">add_defstatus</span><span class="p">(</span><span class="n">def_status</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown defstatus&quot;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">add_part_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">triggers</span><span class="p">,</span> <span class="n">EcflowSuiteTriggers</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">triggers</span><span class="o">.</span><span class="n">trigger_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
