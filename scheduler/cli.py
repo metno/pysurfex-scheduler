@@ -5,21 +5,15 @@ import json
 import os
 
 
-def parse_submit_cmd(argv, exp=False):
+def parse_submit_cmd(argv):
     """Parse the command line input arguments."""
     parser = ArgumentParser("ECF_submit task to ecflow")
-    if exp:
-        parser.add_argument('-exp', type=str, help="Name of experiment")
-        parser.add_argument('-lib', type=str, help="Library path")
-        parser.add_argument('-dtg', dest="dtg", type=str, help="DTG", default=None, required=False)
-        parser.add_argument('-dtgbeg', dest="dtgbeg", type=str, help="DTGBEG", default=None, required=False)
-    else:
-        parser.add_argument('-sub', dest="env_submit", type=str, help="File with submission settings",
-                            required=False)
-        parser.add_argument('-dir', dest="joboutdir", type=str, help="Ecflow JOBOUTDIR", required=False)
-        parser.add_argument('-server', dest="env_server", type=str, help="File or with Ecflow server settimgs",
-                            required=False)
-        parser.add_argument('--log', dest="logfile", type=str, help="Server logfile", required=True)
+
+    parser.add_argument('-sub', dest="env_submit", type=str, help="File with submission settings", required=False)
+    parser.add_argument('-dir', dest="joboutdir", type=str, help="Ecflow JOBOUTDIR", required=False)
+    parser.add_argument('-server', dest="env_server", type=str, help="File or with Ecflow server settimgs",
+                        required=False)
+    parser.add_argument('--log', dest="logfile", type=str, help="Server logfile", required=True)
     parser.add_argument('-ecf_name', type=str, help="Name of ECF Task")
     parser.add_argument('-ecf_tryno', type=str, help="ECF try number")
     parser.add_argument('-ecf_pass', type=str, help="Name of ECF password")
@@ -93,17 +87,13 @@ def submit_cmd(**kwargs):
         raise e
 
 
-def parse_kill_cmd(argv, exp=False):
+def parse_kill_cmd(argv):
     """Parse the command line input arguments."""
     parser = ArgumentParser("Kill EcFlow task and handle abort")
-    if exp:
-        parser.add_argument('-exp', type=str, help="Name of experiment", required=True)
-        parser.add_argument('-lib', type=str, help="Library path", required=True)
-    else:
-        parser.add_argument("-sub", dest='env_submit', type=str, help="File with submission settings", required=True)
-        parser.add_argument('-dir', dest="joboutdirs", type=str, help="Ecflow JOBOUTDIR", required=True)
-        parser.add_argument("-server", dest='server', type=str, help="File with Ecflow server settimgs", required=True)
-        parser.add_argument('--log', dest="logfile", type=str, help="Server logfile", required=True)
+    parser.add_argument("-sub", dest='env_submit', type=str, help="File with submission settings", required=True)
+    parser.add_argument('-dir', dest="joboutdir", type=str, help="Ecflow JOBOUTDIR", required=True)
+    parser.add_argument("-server", dest='env_server', type=str, help="File with Ecflow server settimgs", required=True)
+    parser.add_argument('--log', dest="logfile", type=str, help="Server logfile", required=True)
     parser.add_argument("-ecf_name", dest='ecf_name', type=str, help="ECF_NAME", required=True)
     parser.add_argument("-ecf_tryno", dest='ecf_tryno', type=str, help="ECF_TRYNO", required=True)
     parser.add_argument("-ecf_pass", dest='ecf_pass', type=str, help="ECF_PASS", required=True)
@@ -136,11 +126,11 @@ def kill_cmd(**kwargs):
     env_submit = kwargs["env_submit"]
     if isinstance(env_submit, str):
         env_submit = json.load(open(env_submit, "r"))
-    jobout_dirs = kwargs["joboutdirs"]
-    if isinstance(jobout_dirs, str):
-        jobout_dirs = {"0": jobout_dirs}
+    jobout_dir = kwargs["joboutdir"]
+    if isinstance(jobout_dir, str):
+        jobout_dir = {"0": jobout_dir}
 
-    server = kwargs["server"]
+    server = kwargs["env_server"]
     # If a server environment file, create a server
     if isinstance(server, str):
         logfile = kwargs["logfile"]
@@ -151,7 +141,7 @@ def kill_cmd(**kwargs):
         dry_run = kwargs["dry_run"]
 
     task = scheduler.EcflowTask(ecf_name, ecf_tryno, ecf_pass, ecf_rid, submission_id)
-    task_settings = scheduler.TaskSettings(task, env_submit, jobout_dirs)
+    task_settings = scheduler.TaskSettings(task, env_submit, jobout_dir)
     # print(task.submission_id)
     sub = scheduler.get_submission_object(task, task_settings)
     # print(sub)
@@ -160,15 +150,12 @@ def kill_cmd(**kwargs):
         server.force_aborted(task)
 
 
-def parse_status_cmd(argv, exp=False):
+def parse_status_cmd(argv):
     """Parse the command line input arguments."""
     parser = ArgumentParser("Status of EcFlow task")
-    if exp:
-        parser.add_argument('-exp', type=str, help="Name of experiment", required=True)
-        parser.add_argument('-lib', type=str, help="Library path", required=True)
-    else:
-        parser.add_argument("-sub", dest='env_submit', type=str, help="File with submission settings", required=True)
-        parser.add_argument('-dir', dest="joboutdirs", type=str, help="Ecflow JOBOUTDIR", required=True)
+
+    parser.add_argument("-sub", dest='env_submit', type=str, help="File with submission settings", required=True)
+    parser.add_argument('-dir', dest="joboutdir", type=str, help="Ecflow JOBOUTDIR", required=True)
     parser.add_argument('-ecf_name', type=str, help="ECF_NAME", required=True)
     parser.add_argument('-ecf_tryno', type=str, help="ECF_TRYNO", required=True)
     parser.add_argument('-ecf_pass', type=str, help="ECF_PASS", required=True)
@@ -197,16 +184,16 @@ def status_cmd(**kwargs):
     env_submit = kwargs["env_submit"]
     if isinstance(env_submit, str):
         env_submit = json.load(open(env_submit, "r"))
-    jobout_dirs = kwargs["joboutdirs"]
-    if isinstance(jobout_dirs, str):
-        jobout_dirs = {"0": jobout_dirs}
+    jobout_dir = kwargs["joboutdir"]
+    if isinstance(jobout_dir, str):
+        jobout_dir = {"0": jobout_dir}
 
     dry_run = False
     if "dry_run" in kwargs:
         dry_run = kwargs["dry_run"]
 
     task = scheduler.EcflowTask(ecf_name, ecf_tryno, ecf_pass, ecf_rid, submission_id)
-    task_settings = scheduler.TaskSettings(task, env_submit, jobout_dirs)
+    task_settings = scheduler.TaskSettings(task, env_submit, jobout_dir)
 
     sub = scheduler.get_submission_object(task, task_settings)
     if not dry_run:

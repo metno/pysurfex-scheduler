@@ -8,8 +8,7 @@ import platform
 import traceback
 import sys
 import shutil
-import toml
-sys.path.insert(0, "/usr/lib/python3/dist-packages/")
+import json
 try:
     import ecflow
 except ModuleNotFoundError:
@@ -115,7 +114,7 @@ class EcflowServer(Server):
 class EcflowServerFromFile(EcflowServer):
     def __init__(self, ecflow_server_file, logfile):
         if os.path.exists(ecflow_server_file):
-            self.settings = toml.load(open(ecflow_server_file, "r"))
+            self.settings = json.load(open(ecflow_server_file, "r"))
         else:
             raise FileNotFoundError("Could not find " + ecflow_server_file)
 
@@ -138,7 +137,7 @@ class EcflowServerFromFile(EcflowServer):
 
     def save_as_file(self, wdir):
         fname = self.get_file_name(wdir)
-        toml.dump(self.settings, open(fname,"w"))
+        json.dump(self.settings, open(fname,"w"))
 
     @staticmethod
     def get_file_name(wdir, full_path=False):
