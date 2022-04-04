@@ -2,7 +2,6 @@ import unittest
 import scheduler
 import os
 import json
-import toml
 
 
 class EcflowTest(unittest.TestCase):
@@ -30,11 +29,11 @@ class EcflowTest(unittest.TestCase):
             }
         }
         json.dump(env_submit, open(env_submit_file, "w"))
-        server_config_file = exp_dir + "/env_server.toml"
+        server_config_file = exp_dir + "/env_server.json"
         server_config = {
             "ECF_HOST": "localhost"
         }
-        toml.dump(server_config, open(server_config_file, "w"))
+        json.dump(server_config, open(server_config_file, "w"))
         server_log = exp_dir + "/ECF.log"
         defs = scheduler.SuiteDefinition(suite_name, def_file, joboutdir, ecf_files, env_submit_file,
                                          server_config_file, server_log)
@@ -50,7 +49,7 @@ class EcflowTest(unittest.TestCase):
         joboutdir = "/tmp/host1/job/"
         os.makedirs(joboutdir, exist_ok=True)
         env_submit_file = "/tmp/host1/env_submit_file.json"
-        env_server_file = "/tmp/host1/env_submit_file.toml"
+        env_server_file = "/tmp/host1/env_server_file.json"
         env_submit = {
             "submit_types": ["background"],
             "default_submit_type": "background",
@@ -59,7 +58,7 @@ class EcflowTest(unittest.TestCase):
             }
         }
         json.dump(env_submit, open(env_submit_file, "w"))
-        toml.dump({"ECF_HOST": "localhost"}, open(env_server_file, "w"))
+        json.dump({"ECF_HOST": "localhost"}, open(env_server_file, "w"))
         # Dry submit
         argv = [
             "-sub", env_submit_file,
@@ -71,7 +70,7 @@ class EcflowTest(unittest.TestCase):
             "-ecf_tryno", "1"
         ]
         print(argv)
-        kwargs = scheduler.parse_submit_cmd(argv, exp=False)
+        kwargs = scheduler.parse_submit_cmd(argv)
         kwargs.update({"dry_run": True})
         scheduler.submit_cmd(**kwargs)
 
@@ -85,7 +84,7 @@ class EcflowTest(unittest.TestCase):
             "-submission_id", "0"
         ]
         print(argv)
-        kwargs = scheduler.parse_status_cmd(argv, exp=False)
+        kwargs = scheduler.parse_status_cmd(argv)
         kwargs.update({"dry_run": True})
         scheduler.status_cmd(**kwargs)
 
@@ -101,7 +100,7 @@ class EcflowTest(unittest.TestCase):
             "-submission_id", "0"
         ]
         print(argv)
-        kwargs = scheduler.parse_kill_cmd(argv, exp=False)
+        kwargs = scheduler.parse_kill_cmd(argv)
         kwargs.update({"dry_run": True})
         scheduler.kill_cmd(**kwargs)
 
