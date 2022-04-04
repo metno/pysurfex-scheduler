@@ -9,10 +9,11 @@ import traceback
 import sys
 import shutil
 import json
-try:
-    import ecflow
-except ModuleNotFoundError:
-    ecflow = None
+import ecflow
+#try:
+#    import ecflow
+#except ModuleNotFoundError:
+#    ecflow = None
 
 
 # Base Scheduler server class
