@@ -62,6 +62,7 @@ jobs:
         ecflow_start
         ecflow_client --port $(( `id -u` + 1500 )) --ping
 
+        python -c "import ecflow; print(ecflow.__file__)"
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install sphinx
