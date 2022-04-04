@@ -89,7 +89,9 @@ jobs:
       if: ${{ matrix.python-version == 3.6 }}
       run: |
         ./create_coverage.sh
-        COVERALLS_REPO_TOKEN=${{ secrets.COVERALLS_REPO_TOKEN }} /usr/local/bin/coveralls
+        type coveralls
+        which coveralls
+        COVERALLS_REPO_TOKEN=${{ secrets.COVERALLS_REPO_TOKEN }} coveralls
     - name: Create documentation
       if: ${{ matrix.python-version == 3.6 }}
       run: |
