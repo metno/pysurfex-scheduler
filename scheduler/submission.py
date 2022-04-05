@@ -199,6 +199,7 @@ class TaskSettings(object):
         # print("parse", ecf_task)
         # print(self.submission_defs)
         all_defs = self.submission_defs
+        print(all_defs)
         submit_types = all_defs["submit_types"]
         default_submit_type = all_defs["default_submit_type"]
         task_submit_type = None
