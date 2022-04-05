@@ -14,13 +14,13 @@ Installation of pregenerated packages from pypi (pip)
 
 .. code-block:: bash
 
-    pip3 install pysurfex-scheduler --use-feature=2020-resolver
+    pip3 install pysurfex-scheduler
 
 User installation:
 
 .. code-block:: bash
 
-    pip3 install pysurfex-scheduler --user --use-feature=2020-resolver
+    pip3 install pysurfex-scheduler --user
 
 
 Installation on debian based Linux system
@@ -32,7 +32,7 @@ Install the required pacakges (some might be obsolete if the pip packages contai
 
   sudo apt-get update
   # Python tools
-  sudo apt-get install python3-setuptools python3-numpy python3-scipy python3-nose
+  sudo apt-get install python3-setuptools
   # Ecflow
   sudo apt-get install ecflow-server ecflow-client python3-ecflow
 
@@ -56,8 +56,6 @@ For testing:
 Download the source code, then install ``pysurfex-scheduler`` by executing the following inside the extracted
 folder:
 
-Install pysurfex
--------------------------------------------
 .. code-block:: bash
 
   sudo pip install -e .
@@ -81,8 +79,3 @@ Create documentation
   # Create a pdf documentation
   make latexpdf
 
-
-Examples
------------------------
-
-See https://metno.github.io/pysurfex-scheduler/#examples
