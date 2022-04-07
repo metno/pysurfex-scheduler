@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-PYSURFEX documentation
+PYSURFEX scheduler documentation
 =============================================
 
 .. toctree::
@@ -44,99 +44,99 @@ Classes
 
 Class methods
 ---------------------------------------------
-.. autofunction:: scheduler.SuiteDefinition.__init__
-.. autofunction:: scheduler.SuiteDefinition.save_as_defs
-.. autofunction:: scheduler.EcflowNode.__init__
-.. autofunction:: scheduler.EcflowNode.add_part_trigger
-.. autofunction:: scheduler.EcflowNodeContainer.__init__
-.. autofunction:: scheduler.EcflowSuite.__init__
-.. autofunction:: scheduler.EcflowSuite.save_as_defs
-.. autofunction:: scheduler.EcflowSuiteTriggers.__init__
-.. autofunction:: scheduler.EcflowSuiteTriggers.create_string
-.. autofunction:: scheduler.EcflowSuiteTriggers.add_triggers
-.. autofunction:: scheduler.EcflowSuiteTrigger.__init__
-.. autofunction:: scheduler.EcflowSuiteVariable.__init__
-.. autofunction:: scheduler.EcflowSuiteFamily.__init__
-.. autofunction:: scheduler.EcflowSuiteTask.__init__
-.. autofunction:: scheduler.EcflowSubmitTask.write_header
-.. autofunction:: scheduler.EcflowSubmitTask.write_trailer
-.. autofunction:: scheduler.EcflowSubmitTask.write_job
-.. autofunction:: scheduler.EcflowSubmitTask.submit
-.. autofunction:: scheduler.TaskSettings.check_exceptions
-.. autofunction:: scheduler.TaskSettings.process_settings
-.. autofunction:: scheduler.TaskSettings.parse_submission_defs
-.. autofunction:: scheduler.SubmitException.__init__
-.. autofunction:: scheduler.KillException.__init__
-.. autofunction:: scheduler.StatusException.__init__
-.. autofunction:: scheduler.SubmissionBaseClass.update_db
-.. autofunction:: scheduler.SubmissionBaseClass.clear_db
-.. autofunction:: scheduler.SubmissionBaseClass.set_submit_cmd
-.. autofunction:: scheduler.SubmissionBaseClass.set_jobid
-.. autofunction:: scheduler.SubmissionBaseClass.get_logfile
-.. autofunction:: scheduler.SubmissionBaseClass.submit_job
-.. autofunction:: scheduler.SubmissionBaseClass.kill_job
-.. autofunction:: scheduler.SubmissionBaseClass.set_job_status
-.. autofunction:: scheduler.SubmissionBaseClass.status
-.. autofunction:: scheduler.SubmissionBaseClass.job_status
-.. autofunction:: scheduler.SubmissionBaseClass.kill
-.. autofunction:: scheduler.SubmissionBaseClass.set_kill_cmd
-.. autofunction:: scheduler.SubmissionBaseClass.set_remote_cmd
-.. autofunction:: scheduler.SubmissionBaseClass.set_output
-.. autofunction:: scheduler.SubmissionBaseClass.set_job_name
-.. autofunction:: scheduler.BackgroundSubmission.__init__
-.. autofunction:: scheduler.BackgroundSubmission.set_submit_cmd
-.. autofunction:: scheduler.BackgroundSubmission.set_jobid
-.. autofunction:: scheduler.BackgroundSubmission.get_logfile
-.. autofunction:: scheduler.BackgroundSubmission.set_kill_cmd
-.. autofunction:: scheduler.BackgroundSubmission.set_job_status
-.. autofunction:: scheduler.BackgroundSubmission.set_output
-.. autofunction:: scheduler.BackgroundSubmission.set_job_name
-.. autofunction:: scheduler.BatchSubmission.__init__
-.. autofunction:: scheduler.BatchSubmission.set_submit_cmd
-.. autofunction:: scheduler.BatchSubmission.set_jobid
-.. autofunction:: scheduler.BatchSubmission.get_logfile
-.. autofunction:: scheduler.BatchSubmission.set_kill_cmd
-.. autofunction:: scheduler.BatchSubmission.set_job_status
-.. autofunction:: scheduler.BatchSubmission.set_output
-.. autofunction:: scheduler.BatchSubmission.set_job_name
-.. autofunction:: scheduler.PBSSubmission.__init__
-.. autofunction:: scheduler.PBSSubmission.set_jobid
-.. autofunction:: scheduler.PBSSubmission.set_job_name
-.. autofunction:: scheduler.SlurmSubmission.__init__
-.. autofunction:: scheduler.SlurmSubmission.set_output
-.. autofunction:: scheduler.SlurmSubmission.set_jobid
-.. autofunction:: scheduler.SlurmSubmission.set_job_name
-.. autofunction:: scheduler.GridEngineSubmission.__init__
-.. autofunction:: scheduler.GridEngineSubmission.set_output
-.. autofunction:: scheduler.GridEngineSubmission.set_jobid
-.. autofunction:: scheduler.GridEngineSubmission.set_job_name
-.. autofunction:: scheduler.Server.__init__
-.. autofunction:: scheduler.Server.start_server
-.. autofunction:: scheduler.Server.replace
-.. autofunction:: scheduler.Server.start_suite
-.. autofunction:: scheduler.EcflowServer.__init__
-.. autofunction:: scheduler.EcflowServer.start_server
-.. autofunction:: scheduler.EcflowServer.force_complete
-.. autofunction:: scheduler.EcflowServer.force_aborted
-.. autofunction:: scheduler.EcflowServer.update_submission_id
-.. autofunction:: scheduler.EcflowServer.replace
-.. autofunction:: scheduler.EcflowServer.update_log
-.. autofunction:: scheduler.EcflowServerFromFile.__init__
-.. autofunction:: scheduler.EcflowServerFromFile.get_var
-.. autofunction:: scheduler.EcflowServerFromFile.save_as_file
-.. autofunction:: scheduler.EcflowServerFromFile.get_file_name
-.. autofunction:: scheduler.EcflowLogServer.__init__
-.. autofunction:: scheduler.EcflowTask.__init__
-.. autofunction:: scheduler.EcflowTask.create_submission_log
-.. autofunction:: scheduler.EcflowTask.create_kill_log
-.. autofunction:: scheduler.EcflowTask.create_status_log
-.. autofunction:: scheduler.EcflowTask.create_ecf_job
-.. autofunction:: scheduler.EcflowTask.create_ecf_jobout
-.. autofunction:: scheduler.EcflowClient.__init__
-.. autofunction:: scheduler.EcflowClient.at_time
-.. autofunction:: scheduler.EcflowClient.signal_handler
-.. autofunction:: scheduler.EcflowClient.__enter__
-.. autofunction:: scheduler.EcflowClient.__exit__
+.. automethod:: scheduler.SuiteDefinition.__init__
+.. automethod:: scheduler.SuiteDefinition.save_as_defs
+.. automethod:: scheduler.EcflowNode.__init__
+.. automethod:: scheduler.EcflowNode.add_part_trigger
+.. automethod:: scheduler.EcflowNodeContainer.__init__
+.. automethod:: scheduler.EcflowSuite.__init__
+.. automethod:: scheduler.EcflowSuite.save_as_defs
+.. automethod:: scheduler.EcflowSuiteTriggers.__init__
+.. automethod:: scheduler.EcflowSuiteTriggers.create_string
+.. automethod:: scheduler.EcflowSuiteTriggers.add_triggers
+.. automethod:: scheduler.EcflowSuiteTrigger.__init__
+.. automethod:: scheduler.EcflowSuiteVariable.__init__
+.. automethod:: scheduler.EcflowSuiteFamily.__init__
+.. automethod:: scheduler.EcflowSuiteTask.__init__
+.. automethod:: scheduler.EcflowSubmitTask.write_header
+.. automethod:: scheduler.EcflowSubmitTask.write_trailer
+.. automethod:: scheduler.EcflowSubmitTask.write_job
+.. automethod:: scheduler.EcflowSubmitTask.submit
+.. automethod:: scheduler.TaskSettings.check_exceptions
+.. automethod:: scheduler.TaskSettings.process_settings
+.. automethod:: scheduler.TaskSettings.parse_submission_defs
+.. automethod:: scheduler.SubmitException.__init__
+.. automethod:: scheduler.KillException.__init__
+.. automethod:: scheduler.StatusException.__init__
+.. automethod:: scheduler.SubmissionBaseClass.update_db
+.. automethod:: scheduler.SubmissionBaseClass.clear_db
+.. automethod:: scheduler.SubmissionBaseClass.set_submit_cmd
+.. automethod:: scheduler.SubmissionBaseClass.set_jobid
+.. automethod:: scheduler.SubmissionBaseClass.get_logfile
+.. automethod:: scheduler.SubmissionBaseClass.submit_job
+.. automethod:: scheduler.SubmissionBaseClass.kill_job
+.. automethod:: scheduler.SubmissionBaseClass.set_job_status
+.. automethod:: scheduler.SubmissionBaseClass.status
+.. automethod:: scheduler.SubmissionBaseClass.job_status
+.. automethod:: scheduler.SubmissionBaseClass.kill
+.. automethod:: scheduler.SubmissionBaseClass.set_kill_cmd
+.. automethod:: scheduler.SubmissionBaseClass.set_remote_cmd
+.. automethod:: scheduler.SubmissionBaseClass.set_output
+.. automethod:: scheduler.SubmissionBaseClass.set_job_name
+.. automethod:: scheduler.BackgroundSubmission.__init__
+.. automethod:: scheduler.BackgroundSubmission.set_submit_cmd
+.. automethod:: scheduler.BackgroundSubmission.set_jobid
+.. automethod:: scheduler.BackgroundSubmission.get_logfile
+.. automethod:: scheduler.BackgroundSubmission.set_kill_cmd
+.. automethod:: scheduler.BackgroundSubmission.set_job_status
+.. automethod:: scheduler.BackgroundSubmission.set_output
+.. automethod:: scheduler.BackgroundSubmission.set_job_name
+.. automethod:: scheduler.BatchSubmission.__init__
+.. automethod:: scheduler.BatchSubmission.set_submit_cmd
+.. automethod:: scheduler.BatchSubmission.set_jobid
+.. automethod:: scheduler.BatchSubmission.get_logfile
+.. automethod:: scheduler.BatchSubmission.set_kill_cmd
+.. automethod:: scheduler.BatchSubmission.set_job_status
+.. automethod:: scheduler.BatchSubmission.set_output
+.. automethod:: scheduler.BatchSubmission.set_job_name
+.. automethod:: scheduler.PBSSubmission.__init__
+.. automethod:: scheduler.PBSSubmission.set_jobid
+.. automethod:: scheduler.PBSSubmission.set_job_name
+.. automethod:: scheduler.SlurmSubmission.__init__
+.. automethod:: scheduler.SlurmSubmission.set_output
+.. automethod:: scheduler.SlurmSubmission.set_jobid
+.. automethod:: scheduler.SlurmSubmission.set_job_name
+.. automethod:: scheduler.GridEngineSubmission.__init__
+.. automethod:: scheduler.GridEngineSubmission.set_output
+.. automethod:: scheduler.GridEngineSubmission.set_jobid
+.. automethod:: scheduler.GridEngineSubmission.set_job_name
+.. automethod:: scheduler.Server.__init__
+.. automethod:: scheduler.Server.start_server
+.. automethod:: scheduler.Server.replace
+.. automethod:: scheduler.Server.start_suite
+.. automethod:: scheduler.EcflowServer.__init__
+.. automethod:: scheduler.EcflowServer.start_server
+.. automethod:: scheduler.EcflowServer.force_complete
+.. automethod:: scheduler.EcflowServer.force_aborted
+.. automethod:: scheduler.EcflowServer.update_submission_id
+.. automethod:: scheduler.EcflowServer.replace
+.. automethod:: scheduler.EcflowServer.update_log
+.. automethod:: scheduler.EcflowServerFromFile.__init__
+.. automethod:: scheduler.EcflowServerFromFile.get_var
+.. automethod:: scheduler.EcflowServerFromFile.save_as_file
+.. automethod:: scheduler.EcflowServerFromFile.get_file_name
+.. automethod:: scheduler.EcflowLogServer.__init__
+.. automethod:: scheduler.EcflowTask.__init__
+.. automethod:: scheduler.EcflowTask.create_submission_log
+.. automethod:: scheduler.EcflowTask.create_kill_log
+.. automethod:: scheduler.EcflowTask.create_status_log
+.. automethod:: scheduler.EcflowTask.create_ecf_job
+.. automethod:: scheduler.EcflowTask.create_ecf_jobout
+.. automethod:: scheduler.EcflowClient.__init__
+.. automethod:: scheduler.EcflowClient.at_time
+.. automethod:: scheduler.EcflowClient.signal_handler
+.. automethod:: scheduler.EcflowClient.__enter__
+.. automethod:: scheduler.EcflowClient.__exit__
 
 Methods
 ---------------------------------------------
@@ -155,7 +155,6 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 
