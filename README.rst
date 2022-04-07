@@ -58,13 +58,13 @@ folder:
 
 .. code-block:: bash
 
-  sudo pip install -e .
+  sudo pip3 install -e .
 
 or
 
 .. code-block:: bash
 
-  sudo pip install -e . --user
+  pip3 install -e . --user
 
 Create documentation
 ---------------------------------------------
@@ -79,3 +79,30 @@ Create documentation
   # Create a pdf documentation
   make latexpdf
 
+
+Usage
+--------------------
+
+.. code-block:: python
+
+ import scheduler
+ 
+ # EcFlow variables parsed in EcFlow job
+ ecf_name = "%ECF_NAME%"
+ ecf_pass = "%ECF_PASS%"
+ ecf_tryno = "%ECF_TRYNO%"
+ ecf_rid = "%ECF_RID%"
+ submission_id = "%SUBMISSION_ID%"
+ task_name = "%TASK%"
+ 
+ task = scheduler.EcflowTask(ecf_name, ecf_tryno, ecf_pass, ecf_rid, submission_id)
+ env_submit = {}
+ env_server = {
+   "ECF_HOST": "localhost",
+   "ECF_PORT": 3141,
+   "ECF_PORT_OFFSET": 0
+ }
+ joboutdir = "/tmp/job"
+ 
+ sub = scheduler.EcflowSubmitTask(task, env_submit, env_server, joboutdir)
+ sub.submit()

@@ -1,4 +1,4 @@
-.. SURFEX Python API documentation master file, created by
+.. pysurfex-scheduler Python API documentation master file, created by
    sphinx-quickstart on Mon Mar  2 18:25:38 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
