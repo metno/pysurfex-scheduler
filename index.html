@@ -131,12 +131,651 @@ make latexpdf
 <p>See examples in unit tests (test directory)</p>
 <section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.SuiteDefinition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">SuiteDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suite_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_submit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_home</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_jobout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_job_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_status_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_kill_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pythonpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#SuiteDefinition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SuiteDefinition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Node class is the abstract base class for Suite, Family and Task</p>
+<p>Every Node instance has a name, and a path relative to a suite</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowNodeContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowNodeContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowNodeContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowNodeContainer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuite">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTriggers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuiteTriggers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTriggers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTriggers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTrigger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuiteTrigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'complete'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTrigger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTrigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteVariable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuiteVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteVariable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteVariable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteFamily">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuiteFamily</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteFamily"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteFamily" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSuiteTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowSubmitTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowSubmitTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_submit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpreter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#!/usr/bin/env</span> <span class="pre">python3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensmbr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submit_exceptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coldstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">communication</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#EcflowSubmitTask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSubmitTask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.TaskSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">TaskSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submission_defs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joboutdirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submit_exceptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpreter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#!/usr/bin/env</span> <span class="pre">python3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coldstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#TaskSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.TaskSettings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.SubmitException">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">SubmitException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmitException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmitException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.KillException">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">KillException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#KillException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.KillException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.StatusException">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">StatusException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#StatusException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.StatusException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">SubmissionBaseClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_submit_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_kill_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_status_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">BackgroundSubmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">BatchSubmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.PBSSubmission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">PBSSubmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsub'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qstat</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qdel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#PBS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#PBSSubmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.PBSSubmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.SlurmSubmission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">SlurmSubmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sbatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'squeue</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scancel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#SBATCH'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SlurmSubmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SlurmSubmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.GridEngineSubmission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">GridEngineSubmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsub'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qstat</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qdel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#$'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#GridEngineSubmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.GridEngineSubmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.Server">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">Server</span></span><a class="reference internal" href="_modules/scheduler/scheduler.html#Server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.Server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowServerFromFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowServerFromFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecflow_server_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServerFromFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServerFromFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowLogServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowLogServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_loghost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_logport</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowLogServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowLogServer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_tryno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_pass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_rid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submission_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scheduler.EcflowClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">EcflowClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulate communication with the ecflow server. This will automatically call
+the child command init()/complete(), for job start/finish. It will also
+handle exceptions and signals, by calling the abort child command.
+<em>ONLY</em> one instance of this class, should be used. Otherwise zombies will be created.</p>
+</dd></dl>
+
 </section>
 <section id="class-methods">
 <h2>Class methods<a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SuiteDefinition.__init__">
+<span class="sig-prename descclassname"><span class="pre">SuiteDefinition.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suite_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_submit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_home</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_jobout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_job_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_status_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_kill_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pythonpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#SuiteDefinition.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SuiteDefinition.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SuiteDefinition.save_as_defs">
+<span class="sig-prename descclassname"><span class="pre">SuiteDefinition.</span></span><span class="sig-name descname"><span class="pre">save_as_defs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#SuiteDefinition.save_as_defs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SuiteDefinition.save_as_defs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowNode.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowNode.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowNode.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowNode.add_part_trigger">
+<span class="sig-prename descclassname"><span class="pre">EcflowNode.</span></span><span class="sig-name descname"><span class="pre">add_part_trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowNode.add_part_trigger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowNode.add_part_trigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowNodeContainer.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowNodeContainer.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowNodeContainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowNodeContainer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuite.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuite.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuite.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuite.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuite.save_as_defs">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuite.</span></span><span class="sig-name descname"><span class="pre">save_as_defs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuite.save_as_defs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuite.save_as_defs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTriggers.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteTriggers.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTriggers.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTriggers.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTriggers.create_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EcflowSuiteTriggers.</span></span><span class="sig-name descname"><span class="pre">create_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTriggers.create_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTriggers.create_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTriggers.add_triggers">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteTriggers.</span></span><span class="sig-name descname"><span class="pre">add_triggers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triggers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTriggers.add_triggers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTriggers.add_triggers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTrigger.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteTrigger.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'complete'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTrigger.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTrigger.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteVariable.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteVariable.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteVariable.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteVariable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteFamily.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteFamily.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteFamily.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteFamily.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSuiteTask.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowSuiteTask.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/suites.html#EcflowSuiteTask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSuiteTask.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSubmitTask.write_header">
+<span class="sig-prename descclassname"><span class="pre">EcflowSubmitTask.</span></span><span class="sig-name descname"><span class="pre">write_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#EcflowSubmitTask.write_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSubmitTask.write_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSubmitTask.write_trailer">
+<span class="sig-prename descclassname"><span class="pre">EcflowSubmitTask.</span></span><span class="sig-name descname"><span class="pre">write_trailer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#EcflowSubmitTask.write_trailer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSubmitTask.write_trailer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSubmitTask.write_job">
+<span class="sig-prename descclassname"><span class="pre">EcflowSubmitTask.</span></span><span class="sig-name descname"><span class="pre">write_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#EcflowSubmitTask.write_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSubmitTask.write_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowSubmitTask.submit">
+<span class="sig-prename descclassname"><span class="pre">EcflowSubmitTask.</span></span><span class="sig-name descname"><span class="pre">submit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#EcflowSubmitTask.submit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowSubmitTask.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.TaskSettings.check_exceptions">
+<span class="sig-prename descclassname"><span class="pre">TaskSettings.</span></span><span class="sig-name descname"><span class="pre">check_exceptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">submit_exceptions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#TaskSettings.check_exceptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.TaskSettings.check_exceptions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.TaskSettings.process_settings">
+<span class="sig-prename descclassname"><span class="pre">TaskSettings.</span></span><span class="sig-name descname"><span class="pre">process_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#TaskSettings.process_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.TaskSettings.process_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.TaskSettings.parse_submission_defs">
+<span class="sig-prename descclassname"><span class="pre">TaskSettings.</span></span><span class="sig-name descname"><span class="pre">parse_submission_defs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#TaskSettings.parse_submission_defs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.TaskSettings.parse_submission_defs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmitException.__init__">
+<span class="sig-prename descclassname"><span class="pre">SubmitException.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmitException.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmitException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.KillException.__init__">
+<span class="sig-prename descclassname"><span class="pre">KillException.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#KillException.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.KillException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.StatusException.__init__">
+<span class="sig-prename descclassname"><span class="pre">StatusException.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#StatusException.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.StatusException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.update_db">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">update_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.update_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.update_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.clear_db">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">clear_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.clear_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.clear_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_submit_cmd">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_submit_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_submit_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_submit_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_jobid">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.get_logfile">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">get_logfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.get_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.get_logfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.submit_job">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">submit_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.submit_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.submit_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.kill_job">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">kill_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.kill_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.kill_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_job_status">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_job_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_job_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_job_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.status">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.job_status">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">job_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.job_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.job_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.kill">
+<span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.kill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_kill_cmd">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_kill_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_kill_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_kill_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_remote_cmd">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_remote_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_remote_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_remote_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_output">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SubmissionBaseClass.set_job_name">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SubmissionBaseClass.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SubmissionBaseClass.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SubmissionBaseClass.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.__init__">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_submit_cmd">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_submit_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_submit_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_submit_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_jobid">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.get_logfile">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">get_logfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.get_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.get_logfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_kill_cmd">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_kill_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_kill_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_kill_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_job_status">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_job_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_job_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_output">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BackgroundSubmission.set_job_name">
+<span class="sig-prename descclassname"><span class="pre">BackgroundSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BackgroundSubmission.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BackgroundSubmission.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.__init__">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_submit_cmd">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_submit_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_submit_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_submit_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_jobid">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.get_logfile">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">get_logfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.get_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.get_logfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_kill_cmd">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_kill_cmd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_kill_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_kill_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_job_status">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_job_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_job_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_output">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.BatchSubmission.set_job_name">
+<span class="sig-prename descclassname"><span class="pre">BatchSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#BatchSubmission.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.BatchSubmission.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.PBSSubmission.__init__">
+<span class="sig-prename descclassname"><span class="pre">PBSSubmission.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsub'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qstat</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qdel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#PBS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#PBSSubmission.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.PBSSubmission.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.PBSSubmission.set_jobid">
+<span class="sig-prename descclassname"><span class="pre">PBSSubmission.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#PBSSubmission.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.PBSSubmission.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.PBSSubmission.set_job_name">
+<span class="sig-prename descclassname"><span class="pre">PBSSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#PBSSubmission.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.PBSSubmission.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SlurmSubmission.__init__">
+<span class="sig-prename descclassname"><span class="pre">SlurmSubmission.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sbatch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'squeue</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scancel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#SBATCH'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SlurmSubmission.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SlurmSubmission.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SlurmSubmission.set_output">
+<span class="sig-prename descclassname"><span class="pre">SlurmSubmission.</span></span><span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SlurmSubmission.set_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SlurmSubmission.set_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SlurmSubmission.set_jobid">
+<span class="sig-prename descclassname"><span class="pre">SlurmSubmission.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SlurmSubmission.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SlurmSubmission.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.SlurmSubmission.set_job_name">
+<span class="sig-prename descclassname"><span class="pre">SlurmSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#SlurmSubmission.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.SlurmSubmission.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.GridEngineSubmission.__init__">
+<span class="sig-prename descclassname"><span class="pre">GridEngineSubmission.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qsub'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qstat</span> <span class="pre">-j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qdel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#$'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#GridEngineSubmission.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.GridEngineSubmission.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.GridEngineSubmission.set_output">
+<span class="sig-prename descclassname"><span class="pre">GridEngineSubmission.</span></span><span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#GridEngineSubmission.set_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.GridEngineSubmission.set_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.GridEngineSubmission.set_jobid">
+<span class="sig-prename descclassname"><span class="pre">GridEngineSubmission.</span></span><span class="sig-name descname"><span class="pre">set_jobid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#GridEngineSubmission.set_jobid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.GridEngineSubmission.set_jobid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.GridEngineSubmission.set_job_name">
+<span class="sig-prename descclassname"><span class="pre">GridEngineSubmission.</span></span><span class="sig-name descname"><span class="pre">set_job_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#GridEngineSubmission.set_job_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.GridEngineSubmission.set_job_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.Server.__init__">
+<span class="sig-prename descclassname"><span class="pre">Server.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#Server.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.Server.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.Server.start_server">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Server.</span></span><span class="sig-name descname"><span class="pre">start_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#Server.start_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.Server.start_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.Server.replace">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Server.</span></span><span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suite_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#Server.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.Server.replace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.Server.start_suite">
+<span class="sig-prename descclassname"><span class="pre">Server.</span></span><span class="sig-name descname"><span class="pre">start_suite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#Server.start_suite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.Server.start_suite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.start_server">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">start_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.start_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.start_server" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.force_complete">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">force_complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.force_complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.force_complete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.force_aborted">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">force_aborted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.force_aborted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.force_aborted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.update_submission_id">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">update_submission_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.update_submission_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.update_submission_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.replace">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suite_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.replace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServer.update_log">
+<span class="sig-prename descclassname"><span class="pre">EcflowServer.</span></span><span class="sig-name descname"><span class="pre">update_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServer.update_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServer.update_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServerFromFile.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowServerFromFile.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecflow_server_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServerFromFile.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServerFromFile.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServerFromFile.get_var">
+<span class="sig-prename descclassname"><span class="pre">EcflowServerFromFile.</span></span><span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServerFromFile.get_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServerFromFile.get_var" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServerFromFile.save_as_file">
+<span class="sig-prename descclassname"><span class="pre">EcflowServerFromFile.</span></span><span class="sig-name descname"><span class="pre">save_as_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServerFromFile.save_as_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServerFromFile.save_as_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowServerFromFile.get_file_name">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EcflowServerFromFile.</span></span><span class="sig-name descname"><span class="pre">get_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowServerFromFile.get_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowServerFromFile.get_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowLogServer.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowLogServer.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_loghost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_logport</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowLogServer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowLogServer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecf_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_tryno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_pass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_rid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submission_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecf_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.create_submission_log">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">create_submission_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.create_submission_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.create_submission_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.create_kill_log">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">create_kill_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.create_kill_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.create_kill_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.create_status_log">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">create_status_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.create_status_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.create_status_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.create_ecf_job">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">create_ecf_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.create_ecf_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.create_ecf_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowTask.create_ecf_jobout">
+<span class="sig-prename descclassname"><span class="pre">EcflowTask.</span></span><span class="sig-name descname"><span class="pre">create_ecf_jobout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joboutdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowTask.create_ecf_jobout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowTask.create_ecf_jobout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowClient.__init__">
+<span class="sig-prename descclassname"><span class="pre">EcflowClient.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowClient.at_time">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EcflowClient.</span></span><span class="sig-name descname"><span class="pre">at_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient.at_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient.at_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowClient.signal_handler">
+<span class="sig-prename descclassname"><span class="pre">EcflowClient.</span></span><span class="sig-name descname"><span class="pre">signal_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient.signal_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient.signal_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowClient.__enter__">
+<span class="sig-prename descclassname"><span class="pre">EcflowClient.</span></span><span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient.__enter__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scheduler.EcflowClient.__exit__">
+<span class="sig-prename descclassname"><span class="pre">EcflowClient.</span></span><span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ex_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/scheduler.html#EcflowClient.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.EcflowClient.__exit__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.parse_submit_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">parse_submit_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#parse_submit_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.parse_submit_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the command line input arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.submit_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">submit_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#submit_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.submit_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.parse_kill_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">parse_kill_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#parse_kill_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.parse_kill_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the command line input arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.kill_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">kill_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#kill_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.kill_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.parse_status_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">parse_status_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#parse_status_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.parse_status_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the command line input arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.status_cmd">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">status_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/cli.html#status_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.status_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scheduler.get_submission_object">
+<span class="sig-prename descclassname"><span class="pre">scheduler.</span></span><span class="sig-name descname"><span class="pre">get_submission_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scheduler/submission.html#get_submission_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scheduler.get_submission_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <ul class="simple">
 <li><dl class="field-list simple">
 <dt class="field-odd">ref</dt>

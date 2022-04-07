@@ -6,14 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>scheduler.suites &#8212; Python abstraction for scheduler (pysurfex-scheduler)  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -38,7 +37,7 @@
   <h1>Source code for scheduler.suites</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/usr/lib/python3/dist-packages/&quot;</span><span class="p">)</span>
+<span class="c1">#sys.path.insert(0, &quot;/usr/lib/python3/dist-packages/&quot;)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">ecflow</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -46,7 +45,7 @@
 
 
 <div class="viewcode-block" id="SuiteDefinition"><a class="viewcode-back" href="../../index.html#scheduler.SuiteDefinition">[docs]</a><span class="k">class</span> <span class="nc">SuiteDefinition</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">,</span> <span class="n">ecf_files</span><span class="p">,</span> <span class="n">env_submit</span><span class="p">,</span> <span class="n">server_config</span><span class="p">,</span> <span class="n">server_log</span><span class="p">,</span>
+<div class="viewcode-block" id="SuiteDefinition.__init__"><a class="viewcode-back" href="../../index.html#scheduler.SuiteDefinition.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">,</span> <span class="n">ecf_files</span><span class="p">,</span> <span class="n">env_submit</span><span class="p">,</span> <span class="n">server_config</span><span class="p">,</span> <span class="n">server_log</span><span class="p">,</span>
                  <span class="n">ecf_home</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_include</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_jobout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">ecf_job_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_status_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_kill_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pythonpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 
@@ -130,10 +129,10 @@
 
         <span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span> <span class="o">=</span> <span class="n">EcflowSuite</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">def_file</span><span class="o">=</span><span class="n">def_file</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span> <span class="o">=</span> <span class="n">EcflowSuite</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">def_file</span><span class="o">=</span><span class="n">def_file</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">save_as_defs</span><span class="p">()</span></div>
+<div class="viewcode-block" id="SuiteDefinition.save_as_defs"><a class="viewcode-back" href="../../index.html#scheduler.SuiteDefinition.save_as_defs">[docs]</a>    <span class="k">def</span> <span class="nf">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">save_as_defs</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowNode"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode">[docs]</a><span class="k">class</span> <span class="nc">EcflowNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -144,7 +143,7 @@
 <span class="sd">    Every Node instance has a name, and a path relative to a suite</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowNode.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_type</span> <span class="o">=</span> <span class="n">node_type</span>
 
@@ -190,25 +189,25 @@
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">def_status</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Defstatus</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecf_node</span><span class="o">.</span><span class="n">add_defstatus</span><span class="p">(</span><span class="n">def_status</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown defstatus&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown defstatus&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">add_part_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowNode.add_part_trigger"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode.add_part_trigger">[docs]</a>    <span class="k">def</span> <span class="nf">add_part_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">triggers</span><span class="p">,</span> <span class="n">EcflowSuiteTriggers</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">triggers</span><span class="o">.</span><span class="n">trigger_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecf_node</span><span class="o">.</span><span class="n">add_part_trigger</span><span class="p">(</span><span class="n">triggers</span><span class="o">.</span><span class="n">trigger_string</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Empty trigger&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Triggers must be a Triggers object&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Triggers must be a Triggers object&quot;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowNodeContainer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNodeContainer">[docs]</a><span class="k">class</span> <span class="nc">EcflowNodeContainer</span><span class="p">(</span><span class="n">EcflowNode</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">EcflowNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EcflowNodeContainer.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNodeContainer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">EcflowNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowSuite"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuite">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuite</span><span class="p">(</span><span class="n">EcflowNodeContainer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuite.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuite.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defs</span> <span class="o">=</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Defs</span><span class="p">({})</span>
 
         <span class="n">def_file</span> <span class="o">=</span> <span class="kc">None</span>
@@ -217,22 +216,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">def_file</span> <span class="o">=</span> <span class="n">def_file</span>
         <span class="k">if</span> <span class="n">def_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">def_file</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.def&quot;</span>
-        <span class="n">EcflowNodeContainer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;suite&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">EcflowNodeContainer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;suite&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuite.save_as_defs"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuite.save_as_defs">[docs]</a>    <span class="k">def</span> <span class="nf">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defs</span><span class="o">.</span><span class="n">save_as_defs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">def_file</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;def file saved to &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_file</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;def file saved to &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">def_file</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowSuiteTriggers"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTriggers">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuiteTriggers</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuiteTriggers.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTriggers.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;AND&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;mode&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span>
         <span class="n">trigger_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_string</span><span class="p">(</span><span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">=</span> <span class="n">trigger_string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">=</span> <span class="n">trigger_string</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="EcflowSuiteTriggers.create_string"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTriggers.create_string">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">create_string</span><span class="p">(</span><span class="n">trigs</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
         <span class="n">triggers</span> <span class="o">=</span> <span class="n">trigs</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">triggers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -260,35 +259,35 @@
         <span class="c1"># If no triggers were found/set</span>
         <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
             <span class="n">trigger</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">trigger</span>
+        <span class="k">return</span> <span class="n">trigger</span></div>
 
-    <span class="k">def</span> <span class="nf">add_triggers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;AND&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuiteTriggers.add_triggers"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTriggers.add_triggers">[docs]</a>    <span class="k">def</span> <span class="nf">add_triggers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;AND&quot;</span><span class="p">):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">mode</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
         <span class="n">trigger_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_string</span><span class="p">(</span><span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">trigger_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">trigger_string</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigger_string</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">trigger_string</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowSuiteTrigger"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTrigger">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuiteTrigger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;complete&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuiteTrigger.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTrigger.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;complete&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span></div></div>
         <span class="c1"># self.path = self.node.ecf_node.get_abs_path()</span>
 
 
 <div class="viewcode-block" id="EcflowSuiteVariable"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteVariable">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuiteVariable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuiteVariable.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteVariable.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowSuiteFamily"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteFamily">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuiteFamily</span><span class="p">(</span><span class="n">EcflowNodeContainer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">EcflowNodeContainer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;family&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EcflowSuiteFamily.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteFamily.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">EcflowNodeContainer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;family&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowSuiteTask"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTask">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuiteTask</span><span class="p">(</span><span class="n">EcflowNode</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSuiteTask.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuiteTask.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">EcflowNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;task&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">ecf_files</span> <span class="o">=</span> <span class="kc">None</span>
@@ -304,7 +303,7 @@
                 <span class="n">task_job</span> <span class="o">=</span> <span class="n">ecf_files</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">task_job</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">task_job</span><span class="p">):</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">default_job</span> <span class="o">+</span> <span class="s2">&quot; - &gt; &quot;</span> <span class="o">+</span> <span class="n">task_job</span><span class="p">)</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">default_job</span><span class="p">,</span> <span class="n">task_job</span><span class="p">)</span></div>
+                    <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">default_job</span><span class="p">,</span> <span class="n">task_job</span><span class="p">)</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -317,7 +316,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -340,7 +339,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

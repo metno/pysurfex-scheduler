@@ -6,14 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>scheduler.scheduler &#8212; Python abstraction for scheduler (pysurfex-scheduler)  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -36,61 +35,61 @@
           <div class="body" role="main">
             
   <h1>Source code for scheduler.scheduler</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">toml</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/usr/lib/python3/dist-packages/&quot;</span><span class="p">)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">ecflow</span>
-<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-    <span class="n">ecflow</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">ecflow</span>
+<span class="c1">#try:</span>
+<span class="c1">#    import ecflow</span>
+<span class="c1">#except ModuleNotFoundError:</span>
+<span class="c1">#    ecflow = None</span>
 
 
 <span class="c1"># Base Scheduler server class</span>
 <div class="viewcode-block" id="Server"><a class="viewcode-back" href="../../index.html#scheduler.Server">[docs]</a><span class="k">class</span> <span class="nc">Server</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="Server.__init__"><a class="viewcode-back" href="../../index.html#scheduler.Server.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
 
-    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Server.start_server"><a class="viewcode-back" href="../../index.html#scheduler.Server.start_server">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Server.replace"><a class="viewcode-back" href="../../index.html#scheduler.Server.replace">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">begin_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="k">def</span> <span class="nf">start_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defs</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Server.start_suite"><a class="viewcode-back" href="../../index.html#scheduler.Server.start_suite">[docs]</a>    <span class="k">def</span> <span class="nf">start_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defs</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">def_file</span> <span class="o">=</span> <span class="n">defs</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">def_file</span>
         <span class="n">suite_name</span> <span class="o">=</span> <span class="n">defs</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_server</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">begin</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">begin_suite</span><span class="p">(</span><span class="n">suite_name</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">begin_suite</span><span class="p">(</span><span class="n">suite_name</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowServer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer">[docs]</a><span class="k">class</span> <span class="nc">EcflowServer</span><span class="p">(</span><span class="n">Server</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_host</span><span class="p">,</span> <span class="n">ecf_port</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_host</span><span class="p">,</span> <span class="n">ecf_port</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="p">):</span>
         <span class="k">if</span> <span class="n">ecflow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ecflow was not found&quot;</span><span class="p">)</span>
         <span class="n">Server</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_host</span> <span class="o">=</span> <span class="n">ecf_host</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_port</span> <span class="o">=</span> <span class="n">ecf_port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span> <span class="o">=</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span> <span class="o">=</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_port</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.start_server"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.start_server">[docs]</a>    <span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start EcFlow server&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
@@ -111,26 +110,26 @@
                 <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span>
             <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not restart server!&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not restart server!&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">begin_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">begin_suite</span><span class="p">(</span><span class="n">suite_name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">force_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.force_complete"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.force_complete">[docs]</a>    <span class="k">def</span> <span class="nf">force_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
         <span class="n">ecf_name</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">force_state</span><span class="p">(</span><span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">force_state</span><span class="p">(</span><span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">force_aborted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.force_aborted"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.force_aborted">[docs]</a>    <span class="k">def</span> <span class="nf">force_aborted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
         <span class="n">ecf_name</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">force_state</span><span class="p">(</span><span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">aborted</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">force_state</span><span class="p">(</span><span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">aborted</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">update_submission_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.update_submission_id"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.update_submission_id">[docs]</a>    <span class="k">def</span> <span class="nf">update_submission_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_log</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_log</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">submission_id</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;SUBMISSION_ID&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">submission_id</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">alter</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;SUBMISSION_ID&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">submission_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">alter</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;SUBMISSION_ID&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">submission_id</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.replace"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">)</span>
@@ -139,21 +138,21 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">suite_name</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecf_client</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">suite_name</span><span class="p">,</span> <span class="n">def_file</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not replace suite &quot;</span> <span class="o">+</span> <span class="n">suite_name</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not replace suite &quot;</span> <span class="o">+</span> <span class="n">suite_name</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">update_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServer.update_log"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServer.update_log">[docs]</a>    <span class="k">def</span> <span class="nf">update_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
         <span class="n">utcnow</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;[%H:%M:%S </span><span class="si">%d</span><span class="s2">.%m.%Y]&quot;</span><span class="p">)</span>
         <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
         <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">utcnow</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowServerFromFile"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServerFromFile">[docs]</a><span class="k">class</span> <span class="nc">EcflowServerFromFile</span><span class="p">(</span><span class="n">EcflowServer</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecflow_server_file</span><span class="p">,</span> <span class="n">logfile</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServerFromFile.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServerFromFile.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecflow_server_file</span><span class="p">,</span> <span class="n">logfile</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ecflow_server_file</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">ecflow_server_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">ecflow_server_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;Could not find &quot;</span> <span class="o">+</span> <span class="n">ecflow_server_file</span><span class="p">)</span>
 
@@ -163,37 +162,37 @@
         <span class="n">ecf_port</span> <span class="o">=</span> <span class="n">ecf_port</span> <span class="o">+</span> <span class="n">ecf_port_offset</span>
 
         <span class="c1"># logfile = self.get_var(&quot;SERVER_LOG&quot;)</span>
-        <span class="n">EcflowServer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_host</span><span class="p">,</span> <span class="n">ecf_port</span><span class="p">,</span> <span class="n">logfile</span><span class="p">)</span>
+        <span class="n">EcflowServer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_host</span><span class="p">,</span> <span class="n">ecf_port</span><span class="p">,</span> <span class="n">logfile</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServerFromFile.get_var"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServerFromFile.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">default</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Variable &quot;</span> <span class="o">+</span> <span class="n">var</span> <span class="o">+</span> <span class="s2">&quot; not found!&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Variable &quot;</span> <span class="o">+</span> <span class="n">var</span> <span class="o">+</span> <span class="s2">&quot; not found!&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">save_as_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wdir</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowServerFromFile.save_as_file"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServerFromFile.save_as_file">[docs]</a>    <span class="k">def</span> <span class="nf">save_as_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wdir</span><span class="p">):</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_name</span><span class="p">(</span><span class="n">wdir</span><span class="p">)</span>
-        <span class="n">toml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">))</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">))</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="EcflowServerFromFile.get_file_name"><a class="viewcode-back" href="../../index.html#scheduler.EcflowServerFromFile.get_file_name">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_file_name</span><span class="p">(</span><span class="n">wdir</span><span class="p">,</span> <span class="n">full_path</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;Env_server&quot;</span>
         <span class="k">if</span> <span class="n">full_path</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">wdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span>
-        <span class="k">return</span> <span class="n">f</span></div>
+        <span class="k">return</span> <span class="n">f</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowLogServer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowLogServer">[docs]</a><span class="k">class</span> <span class="nc">EcflowLogServer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_loghost</span><span class="p">,</span> <span class="n">ecf_logport</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowLogServer.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowLogServer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_loghost</span><span class="p">,</span> <span class="n">ecf_logport</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_loghost</span> <span class="o">=</span> <span class="n">ecf_loghost</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_logport</span> <span class="o">=</span> <span class="n">ecf_logport</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ecf_logport</span> <span class="o">=</span> <span class="n">ecf_logport</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowTask"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask">[docs]</a><span class="k">class</span> <span class="nc">EcflowTask</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecf_tryno</span><span class="p">,</span> <span class="n">ecf_pass</span><span class="p">,</span> <span class="n">ecf_rid</span><span class="p">,</span> <span class="n">submission_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowTask.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ecf_name</span><span class="p">,</span> <span class="n">ecf_tryno</span><span class="p">,</span> <span class="n">ecf_pass</span><span class="p">,</span> <span class="n">ecf_rid</span><span class="p">,</span> <span class="n">submission_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecf_timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">=</span> <span class="n">ecf_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ecf_tryno</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_pass</span> <span class="o">=</span> <span class="n">ecf_pass</span>
@@ -213,22 +212,22 @@
 
         <span class="k">if</span> <span class="n">submission_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">submission_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">submission_id</span> <span class="o">=</span> <span class="n">submission_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submission_id</span> <span class="o">=</span> <span class="n">submission_id</span></div>
 
-    <span class="k">def</span> <span class="nf">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.sub&quot;</span>
+<div class="viewcode-block" id="EcflowTask.create_submission_log"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.create_submission_log">[docs]</a>    <span class="k">def</span> <span class="nf">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.sub&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">create_kill_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.kill&quot;</span>
+<div class="viewcode-block" id="EcflowTask.create_kill_log"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.create_kill_log">[docs]</a>    <span class="k">def</span> <span class="nf">create_kill_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.kill&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">create_status_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.stat&quot;</span>
+<div class="viewcode-block" id="EcflowTask.create_status_log"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.create_status_log">[docs]</a>    <span class="k">def</span> <span class="nf">create_status_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.stat&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">create_ecf_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span>
+<div class="viewcode-block" id="EcflowTask.create_ecf_job"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.create_ecf_job">[docs]</a>    <span class="k">def</span> <span class="nf">create_ecf_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.job&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">create_ecf_jobout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EcflowTask.create_ecf_jobout"><a class="viewcode-back" href="../../index.html#scheduler.EcflowTask.create_ecf_jobout">[docs]</a>    <span class="k">def</span> <span class="nf">create_ecf_jobout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">joboutdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecf_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ecf_tryno</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="EcflowClient"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient">[docs]</a><span class="k">class</span> <span class="nc">EcflowClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -238,7 +237,7 @@
 <span class="sd">       *ONLY* one instance of this class, should be used. Otherwise zombies will be created.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowClient.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating Client&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ci</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">ecf_client</span>
@@ -268,24 +267,24 @@
         <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_handler</span><span class="p">)</span>
         <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGXCPU</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_handler</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;Darwin&quot;</span><span class="p">:</span>
-            <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGPWR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_handler</span><span class="p">)</span>
+            <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGPWR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal_handler</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="EcflowClient.at_time"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient.at_time">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">at_time</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">signal_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signum</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowClient.signal_handler"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient.signal_handler">[docs]</a>    <span class="k">def</span> <span class="nf">signal_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signum</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   Aborting: Signal handler called with signal &#39;</span><span class="p">,</span> <span class="n">signum</span><span class="p">)</span>
         <span class="c1"># self.ci.child_abort(&quot;Signal handler called with signal &quot; + str(signum))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="s2">&quot;Signal handler called with signal &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">signum</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="s2">&quot;Signal handler called with signal &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">signum</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowClient.__enter__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient.__enter__">[docs]</a>    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calling init at: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_time</span><span class="p">())</span>
         <span class="c1"># self.server.update_log(self.task.ecf_name + &quot; init&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">child_init</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ci</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ci</span></div>
 
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex_type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowClient.__exit__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowClient.__exit__">[docs]</a>    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex_type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Client:__exit__: ex_type:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex_type</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; value:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ex_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calling abort &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_time</span><span class="p">())</span>
@@ -312,7 +311,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calling complete at: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_time</span><span class="p">())</span>
         <span class="c1"># self.server.update_log(self.task.ecf_name + &quot; complete&quot;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">child_complete</span><span class="p">()</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
 
 </pre></div>
 
@@ -326,7 +325,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -349,7 +348,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
