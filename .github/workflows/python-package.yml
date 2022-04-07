@@ -96,6 +96,8 @@ jobs:
     - name: Create documentation
       if: ${{ matrix.python-version == 3.6 }}
       run: |
+        export PYTHONPATH="/usr/lib/python3/dist-packages/:$PYTHONPATH"
+        python -c "import ecflow; print(ecflow.__file__)"
         cd docs
         make html
     - name: Commit documentation changes
