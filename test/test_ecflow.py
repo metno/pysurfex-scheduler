@@ -114,17 +114,17 @@ class EcflowTest(unittest.TestCase):
 
         def_file = "unittest_test_ecflow.def"
         suite_name = "test_ecflow"
-        suite = scheduler.EcflowSuite(suite_name, def_file=def_file)
+        suite = scheduler.EcflowSuite(suite_name)
         fam = scheduler.EcflowSuiteFamily("My_family", suite)
         var = scheduler.EcflowSuiteVariable("ECF_PASS", "FREE")
         scheduler.EcflowSuiteTask("My_task", fam, variables=var)
 
-        suite.save_as_defs()
+        suite.save_as_defs(def_file)
         server.start_server()
         server.replace(suite_name, def_file)
         server.begin_suite(suite_name)
 
-        # Typically inside ecflow task job file e.g. default.py
+        # Typically, inside ecflow task job file e.g. default.py
         ecf_name = "/test_ecflow/My_family/My_task"
         ecf_pass = "FREE"
         ecf_tryno = "1"
@@ -145,12 +145,12 @@ class EcflowTest(unittest.TestCase):
 
         def_file = "unittest_test_ecflow_failed.def"
         suite_name = "test_ecflow_failed"
-        suite = scheduler.EcflowSuite(suite_name, def_file=def_file)
+        suite = scheduler.EcflowSuite(suite_name)
         fam = scheduler.EcflowSuiteFamily("My_family", suite)
         var = scheduler.EcflowSuiteVariable("ECF_PASS", "FREE")
         scheduler.EcflowSuiteTask("My_task", fam, variables=var)
 
-        suite.save_as_defs()
+        suite.save_as_defs(def_file)
         server.start_server()
         server.replace(suite_name, def_file)
         server.begin_suite(suite_name)

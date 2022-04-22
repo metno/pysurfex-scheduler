@@ -100,7 +100,7 @@ class EcflowSubmitTask(object):
                 self.ecflow_server.update_submission_id(self.task)
 
         except RuntimeError:
-            # Supposed to handle abort it self unless killed
+            # Supposed to handle abort self unless killed
             pass
         except Exception as error:
             raise SubmitException("Submission failed " + repr(error), self.task, self.task_settings)

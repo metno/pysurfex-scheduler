@@ -1,6 +1,4 @@
-import sys
 import os
-#sys.path.insert(0, "/usr/lib/python3/dist-packages/")
 try:
     import ecflow
 except ImportError:
@@ -8,7 +6,7 @@ except ImportError:
 
 
 class SuiteDefinition(object):
-    def __init__(self, suite_name, def_file, joboutdir, ecf_files, env_submit, server_config, server_log,
+    def __init__(self, suite_name, joboutdir, ecf_files, env_submit,
                  ecf_home=None, ecf_include=None, ecf_out=None, ecf_jobout=None,
                  ecf_job_cmd=None, ecf_status_cmd=None, ecf_kill_cmd=None, pythonpath="", path=""):
 
@@ -32,15 +30,15 @@ class SuiteDefinition(object):
         self.ecf_jobout = ecf_jobout
 
         self.env_submit = env_submit
-        self.server_config = server_config
-        self.server_log = server_log
+        # self.server_config = server_config
+        # self.server_log = server_log
 
         if pythonpath != "":
             pythonpath = pythonpath + "; "
         if path != "":
             path = path + "/"
         if ecf_job_cmd is None:
-            ecf_job_cmd =  pythonpath + path + "ECF_submit " \
+            ecf_job_cmd = pythonpath + path + "ECF_submit " \
                                    "-sub %ENV_SUBMIT% " \
                                    "-dir %ECF_OUT% " \
                                    "-server %SERVER_CONFIG% " \
@@ -73,29 +71,29 @@ class SuiteDefinition(object):
                                    "-submission_id %SUBMISSION_ID%"
         self.ecf_kill_cmd = ecf_kill_cmd
 
-        variables = [EcflowSuiteVariable("ECF_EXTN", ".py"),
-                     EcflowSuiteVariable("STREAM", ""),
-                     EcflowSuiteVariable("ENSMBR", ""),
-                     EcflowSuiteVariable("ECF_FILES", self.ecf_files),
-                     EcflowSuiteVariable("ECF_INCLUDE", self.ecf_include),
-                     EcflowSuiteVariable("ECF_TRIES", 1),
-                     EcflowSuiteVariable("SUBMISSION_ID", ""),
-                     EcflowSuiteVariable("ECF_HOME", self.ecf_home),
-                     EcflowSuiteVariable("ECF_KILL_CMD", self.ecf_kill_cmd),
-                     EcflowSuiteVariable("ECF_JOB_CMD", self.ecf_job_cmd),
-                     EcflowSuiteVariable("ECF_STATUS_CMD", self.ecf_status_cmd),
-                     EcflowSuiteVariable("ECF_OUT", self.ecf_out),
-                     EcflowSuiteVariable("ECF_JOBOUT", self.ecf_jobout),
-                     EcflowSuiteVariable("ENV_SUBMIT", self.env_submit),
-                     EcflowSuiteVariable("SERVER_CONFIG", self.server_config),
-                     EcflowSuiteVariable("LOGFILE", self.server_log)
-
+        variables = [
+            EcflowSuiteVariable("ECF_EXTN", ".py"),
+            EcflowSuiteVariable("STREAM", ""),
+            EcflowSuiteVariable("ENSMBR", ""),
+            EcflowSuiteVariable("ECF_FILES", self.ecf_files),
+            EcflowSuiteVariable("ECF_INCLUDE", self.ecf_include),
+            EcflowSuiteVariable("ECF_TRIES", 1),
+            EcflowSuiteVariable("SUBMISSION_ID", ""),
+            EcflowSuiteVariable("ECF_HOME", self.ecf_home),
+            EcflowSuiteVariable("ECF_KILL_CMD", self.ecf_kill_cmd),
+            EcflowSuiteVariable("ECF_JOB_CMD", self.ecf_job_cmd),
+            EcflowSuiteVariable("ECF_STATUS_CMD", self.ecf_status_cmd),
+            EcflowSuiteVariable("ECF_OUT", self.ecf_out),
+            EcflowSuiteVariable("ECF_JOBOUT", self.ecf_jobout),
+            EcflowSuiteVariable("ENV_SUBMIT", self.env_submit),
+            # EcflowSuiteVariable("SERVER_CONFIG", self.server_config),
+            # EcflowSuiteVariable("LOGFILE", self.server_log)
         ]
 
-        self.suite = EcflowSuite(name, def_file=def_file, variables=variables)
+        self.suite = EcflowSuite(name, variables=variables)
 
-    def save_as_defs(self):
-        self.suite.save_as_defs()
+    def save_as_defs(self, def_file):
+        self.suite.save_as_defs(def_file)
 
 
 class EcflowNode(object):
@@ -124,16 +122,17 @@ class EcflowNode(object):
         if "triggers" in kwargs:
             triggers = kwargs["triggers"]
 
-        variables = None
         if "variables" in kwargs:
             variables = kwargs["variables"]
-        self.variables = variables
+            if not isinstance(variables, list):
+                variables = [variables]
+            if variables is None:
+                variables = []
+        else:
+            variables = []
 
-        if self.variables is not None:
-            if not isinstance(self.variables, list):
-                self.variables = [self.variables]
-            for v in self.variables:
-                self.ecf_node.add_variable(v.name, v.value)
+        for v in variables:
+            self.ecf_node.add_variable(v.name, v.value)
 
         if triggers is not None:
             if isinstance(triggers, EcflowSuiteTriggers):
@@ -173,17 +172,11 @@ class EcflowSuite(EcflowNodeContainer):
     def __init__(self, name, **kwargs):
         self.defs = ecflow.Defs({})
 
-        def_file = None
-        if "def_file" in kwargs:
-            def_file = kwargs["def_file"]
-        self.def_file = def_file
-        if def_file is None:
-            self.def_file = name + ".def"
         EcflowNodeContainer.__init__(self, name, "suite", self.defs, **kwargs)
 
-    def save_as_defs(self):
-        self.defs.save_as_defs(self.def_file)
-        print("def file saved to " + self.def_file)
+    def save_as_defs(self, def_file):
+        self.defs.save_as_defs(def_file)
+        print("def file saved to " + def_file)
 
 
 class EcflowSuiteTriggers(object):
@@ -232,10 +225,18 @@ class EcflowSuiteTriggers(object):
 
 
 class EcflowSuiteTrigger(object):
+    """
+    EcFlow Trigger in a suite
+    """
     def __init__(self, node, mode="complete"):
+        """Create a EcFlow trigger object
+
+        Args:
+            node (scheduler.EcflowNode): The node to trigger on
+            mode (str):
+        """
         self.node = node
         self.mode = mode
-        # self.path = self.node.ecf_node.get_abs_path()
 
 
 class EcflowSuiteVariable(object):

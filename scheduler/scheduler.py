@@ -9,17 +9,16 @@ import traceback
 import sys
 import shutil
 import json
-import ecflow
-#try:
-#    import ecflow
-#except ModuleNotFoundError:
-#    ecflow = None
+try:
+    import ecflow
+except ModuleNotFoundError:
+    ecflow = None
 
 
 # Base Scheduler server class
 class Server(ABC):
     def __init__(self):
-        pass
+        self.settings = None
 
     @abstractmethod
     def start_server(self):
@@ -33,9 +32,7 @@ class Server(ABC):
     def begin_suite(self, suite_name):
         raise NotImplementedError
 
-    def start_suite(self, defs, begin=True):
-        def_file = defs.suite.def_file
-        suite_name = defs.suite.name
+    def start_suite(self, suite_name, def_file, begin=True):
         self.start_server()
         self.replace(suite_name, def_file)
         if begin:
@@ -43,7 +40,7 @@ class Server(ABC):
 
 
 class EcflowServer(Server):
-    def __init__(self, ecf_host, ecf_port, logfile, ):
+    def __init__(self, ecf_host, ecf_port, logfile):
         if ecflow is None:
             raise Exception("Ecflow was not found")
         Server.__init__(self)
@@ -51,6 +48,10 @@ class EcflowServer(Server):
         self.ecf_port = ecf_port
         self.logfile = logfile
         self.ecf_client = ecflow.Client(self.ecf_host, self.ecf_port)
+        self.settings = {
+            "ECF_HOST": self.ecf_host,
+            "ECF_PORT": self.ecf_port
+        }
 
     def start_server(self):
         print("Start EcFlow server")
@@ -138,7 +139,7 @@ class EcflowServerFromFile(EcflowServer):
 
     def save_as_file(self, wdir):
         fname = self.get_file_name(wdir)
-        json.dump(self.settings, open(fname,"w"))
+        json.dump(self.settings, open(fname, "w"))
 
     @staticmethod
     def get_file_name(wdir, full_path=False):
@@ -239,7 +240,7 @@ class EcflowClient(object):
     def signal_handler(self, signum, extra=None):
         print('   Aborting: Signal handler called with signal ', signum)
         # self.ci.child_abort("Signal handler called with signal " + str(signum))
-        self.__exit__(Exception, "Signal handler called with signal " + str(signum), None)
+        self.__exit__(Exception, "Signal handler called with signal " + str(signum), extra)
 
     def __enter__(self):
         print('Calling init at: ' + self.at_time())
@@ -275,4 +276,3 @@ class EcflowClient(object):
         # self.server.update_log(self.task.ecf_name + " complete")
         self.ci.child_complete()
         return False
-
