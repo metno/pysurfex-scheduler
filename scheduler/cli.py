@@ -49,9 +49,11 @@ def submit_cmd(**kwargs):
     if isinstance(env_submit, str):
         env_submit = json.load(open(env_submit, "r"))
     env_server = kwargs["env_server"]
+    logfile = kwargs["logfile"]
     if isinstance(env_server, str):
-        logfile = kwargs["logfile"]
         env_server = scheduler.EcflowServerFromFile(env_server, logfile=logfile)
+    else:
+        env_server = scheduler.EcflowServer(env_server["ECF_HOST"], env_server["ECF_PORT"], logfile=logfile)
     env_file = None
     if "env_file" in kwargs:
         env_file = kwargs["env_file"]

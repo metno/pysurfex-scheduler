@@ -22,6 +22,7 @@ class EcflowSubmitTask(object):
         self.db_file = dbfile
         self.stream = stream
         self.complete = False
+        self.debug = False
 
         # Parse Env_submit
         self.task_settings = TaskSettings(self.task, env_submit, joboutdir, interpreter=interpreter,
@@ -67,7 +68,7 @@ class EcflowSubmitTask(object):
                 fh.write(str(self.task_settings.trailer[setting]) + "\n")
 
     def write_job(self):
-        ecf_job = self.task_settings.ecf_job_at_host
+        ecf_job = self.task_settings.ecf_job
         fname = ecf_job + ".tmp"
         shutil.move(ecf_job, fname)
         fh = open(ecf_job, "w")
@@ -88,15 +89,29 @@ class EcflowSubmitTask(object):
                 self.task_settings.header.update({"OUTPUT": self.sub.set_output()})
             if "NAME" not in self.task_settings.header:
                 self.task_settings.header.update({"NAME": self.sub.set_job_name()})
+            if self.debug:
+                print("write")
             self.write_job()
 
             if self.complete:
+                if self.debug:
+                    print("force_complete")
                 self.ecflow_server.force_complete(self.task)
             else:
+                if self.debug:
+                    print("sub.set_submit_cmd")
                 self.sub.set_submit_cmd()
+                if self.debug:
+                    print("submit_job")
                 self.sub.submit_job()
+                if self.debug:
+                    print("set_jobid")
                 self.sub.set_jobid()
+                if self.debug:
+                    print("job_id")
                 self.task.submission_id = self.sub.job_id
+                if self.debug:
+                    print("update_submission_id")
                 self.ecflow_server.update_submission_id(self.task)
 
         except RuntimeError:
@@ -229,7 +244,7 @@ class TaskSettings(object):
 
 class SubmitException(Exception):
     def __init__(self, msg, task, task_settings):
-        logfile = task.create_submission_log(task_settings.joboutdir_at_host)
+        logfile = task.create_submission_log(task_settings.joboutdir)
         fh = open(logfile, "a")
         fh.write(msg)
         fh.flush()
@@ -240,7 +255,7 @@ class SubmitException(Exception):
 
 class KillException(Exception):
     def __init__(self, msg, task, task_settings):
-        logfile = task.create_kill_log(task_settings.joboutdir_at_host)
+        logfile = task.create_kill_log(task_settings.joboutdir)
         fh = open(logfile, "a")
         fh.write(msg)
         fh.flush()
@@ -252,7 +267,7 @@ class KillException(Exception):
 class StatusException(Exception):
     def __init__(self, msg, task, task_settings):
         # joboutdir = task.joboutdir
-        logfile = task.create_status_log(task_settings.joboutdir_at_host)
+        logfile = task.create_status_log(task_settings.joboutdir)
         fh = open(logfile, "a")
         fh.write(msg)
         fh.flush()
@@ -328,7 +343,7 @@ class SubmissionBaseClass(ABC):
             print(cmd)
             print(logfile)
             if logfile is None:
-                subfile = self.task.create_submission_log(self.task_settings.joboutdir_at_host)
+                subfile = self.task.create_submission_log(self.task_settings.joboutdir)
                 subfile = open(subfile, "w")
                 print(cmd)
                 process = subprocess.Popen(cmd, stdout=subfile, stderr=subfile, shell=True)
@@ -525,7 +540,7 @@ class PBSSubmission(BatchSubmission):
 
     def set_jobid(self):
 
-        logfile = self.task.create_submission_log(self.task_settings.joboutdir_at_host)
+        logfile = self.task.create_submission_log(self.task_settings.joboutdir)
         fh = open(logfile, "r")
         lines = fh.readlines()
         fh.close()
@@ -534,12 +549,14 @@ class PBSSubmission(BatchSubmission):
         for line in lines:
             answer = line
 
-        expected_len = 7
+        #expected_len = 7
+        expected_len = 1
         answer = answer.replace("\n", "")
         words = answer.split(" ")
         if len(words) == expected_len:
             # Set job id as the second element in answer
-            self.job_id = str(words[2])
+            self.job_id = str(words[0])
+            # self.job_id = str(words[2])
         else:
             raise Exception("Expected " + str(expected_len) + " in output. Got " + str(len(words)))
 
