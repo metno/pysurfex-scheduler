@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "Your job pbs.12345 ("name") has been submitted"
+#echo "Your job pbs.12345 ("name") has been submitted"
+echo "pbs.12345"
