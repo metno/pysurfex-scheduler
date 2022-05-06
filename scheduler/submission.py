@@ -365,7 +365,7 @@ class SubmissionBaseClass(ABC):
     def kill_job(self):
 
         if self.kill_job_cmd is not None:
-            killfile = self.task.create_kill_log(self.task_settings.joboutdir_at_host)
+            killfile = self.task.create_kill_log(self.task_settings.joboutdir)
             # print(self.kill_job_cmd)
             cmd = self.set_remote_cmd(self.kill_job_cmd, self.remote_kill_cmd)
             fh = open(killfile, "w")
@@ -381,7 +381,7 @@ class SubmissionBaseClass(ABC):
             if ret != 0:
                 raise RuntimeError("Kill command failed with error code " + str(ret))
 
-            logfile = self.task_settings.ecf_jobout_at_host
+            logfile = self.task_settings.ecf_jobout
             if os.path.exists(logfile):
                 mode = "a"
             else:
@@ -413,7 +413,7 @@ class SubmissionBaseClass(ABC):
     def job_status(self):
         print(self.job_status_cmd)
         if self.job_status_cmd is not None:
-            statusfile = self.task.create_status_log(self.task_settings.joboutdir_at_host)
+            statusfile = self.task.create_status_log(self.task_settings.joboutdir)
             cmd = self.set_remote_cmd(self.job_status_cmd, self.remote_status_cmd)
             stdout = open(statusfile, "w")
             process = subprocess.Popen(cmd, stdout=stdout, stderr=stdout, shell=True)
@@ -461,14 +461,14 @@ class BackgroundSubmission(SubmissionBaseClass):
         SubmissionBaseClass.__init__(self, task, task_settings, db=db)
 
     def set_submit_cmd(self):
-        ecf_job = self.task_settings.ecf_job_at_host
+        ecf_job = self.task_settings.ecf_job
         self.submit_cmd = self.set_remote_cmd(ecf_job, self.remote_submit_cmd)
 
     def set_jobid(self):
         return str(self.process.pid)
 
     def get_logfile(self):
-        ecf_jobout = self.task_settings.ecf_jobout_at_host
+        ecf_jobout = self.task_settings.ecf_jobout
         return ecf_jobout
 
     def set_kill_cmd(self):
@@ -579,7 +579,7 @@ class SlurmSubmission(BatchSubmission):
 
     def set_jobid(self):
 
-        logfile = self.task.create_submission_log(self.task_settings.joboutdir_at_host)
+        logfile = self.task.create_submission_log(self.task_settings.joboutdir)
         fh = open(logfile, "r")
         lines = fh.readlines()
         fh.close()
@@ -620,7 +620,7 @@ class GridEngineSubmission(BatchSubmission):
     def set_jobid(self):
 
         # Your job XXXXXX ("name") has been submitted
-        logfile = self.task.create_submission_log(self.task_settings.joboutdir_at_host)
+        logfile = self.task.create_submission_log(self.task_settings.joboutdir)
         fh = open(logfile, "r")
         lines = fh.readlines()
         fh.close()
