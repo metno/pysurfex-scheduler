@@ -1,4 +1,6 @@
+"""Ecflow suites."""
 import os
+import logging
 try:
     import ecflow
 except ImportError:
@@ -6,10 +8,36 @@ except ImportError:
 
 
 class SuiteDefinition(object):
+    """The definition of the suite.
+
+    Args:
+        object (_type_): _description_
+    """
+
     def __init__(self, suite_name, joboutdir, ecf_files, env_submit,
                  ecf_home=None, ecf_include=None, ecf_out=None, ecf_jobout=None,
                  ecf_job_cmd=None, ecf_status_cmd=None, ecf_kill_cmd=None, pythonpath="", path=""):
+        """Construct the definition.
 
+        Args:
+            suite_name (_type_): _description_
+            joboutdir (_type_): _description_
+            ecf_files (_type_): _description_
+            env_submit (_type_): _description_
+            ecf_home (_type_, optional): _description_. Defaults to None.
+            ecf_include (_type_, optional): _description_. Defaults to None.
+            ecf_out (_type_, optional): _description_. Defaults to None.
+            ecf_jobout (_type_, optional): _description_. Defaults to None.
+            ecf_job_cmd (_type_, optional): _description_. Defaults to None.
+            ecf_status_cmd (_type_, optional): _description_. Defaults to None.
+            ecf_kill_cmd (_type_, optional): _description_. Defaults to None.
+            pythonpath (str, optional): _description_. Defaults to "".
+            path (str, optional): _description_. Defaults to "".
+
+        Raises:
+            Exception: _description_
+
+        """
         if ecflow is None:
             raise Exception("Ecflow not loaded properly")
 
@@ -39,36 +67,36 @@ class SuiteDefinition(object):
             path = path + "/"
         if ecf_job_cmd is None:
             ecf_job_cmd = pythonpath + path + "ECF_submit " \
-                                   "-sub %ENV_SUBMIT% " \
-                                   "-dir %ECF_OUT% " \
-                                   "-server %SERVER_CONFIG% " \
-                                   "--log %LOGFILE% " \
-                                   "-ecf_name %ECF_NAME% " \
-                                   "-ecf_tryno %ECF_TRYNO% " \
-                                   "-ecf_pass %ECF_PASS% " \
-                                   "-ecf_rid %ECF_RID% "
+                                              "-sub %ENV_SUBMIT% " \
+                                              "-dir %ECF_OUT% " \
+                                              "-server %SERVER_CONFIG% " \
+                                              "--log %LOGFILE% " \
+                                              "-ecf_name %ECF_NAME% " \
+                                              "-ecf_tryno %ECF_TRYNO% " \
+                                              "-ecf_pass %ECF_PASS% " \
+                                              "-ecf_rid %ECF_RID% "
         self.ecf_job_cmd = ecf_job_cmd
         if ecf_status_cmd is None:
             ecf_status_cmd = pythonpath + path + "ECF_status " \
-                                   "-dir %ECF_OUT% " \
-                                   "-ecf_name %ECF_NAME% " \
-                                   "-ecf_tryno %ECF_TRYNO% " \
-                                   "-ecf_pass %ECF_PASS% " \
-                                   "-ecf_rid %ECF_RID% " \
-                                   "-submission_id %SUBMISSION_ID%"
+                                                 "-dir %ECF_OUT% " \
+                                                 "-ecf_name %ECF_NAME% " \
+                                                 "-ecf_tryno %ECF_TRYNO% " \
+                                                 "-ecf_pass %ECF_PASS% " \
+                                                 "-ecf_rid %ECF_RID% " \
+                                                 "-submission_id %SUBMISSION_ID%"
 
         self.ecf_status_cmd = ecf_status_cmd
         if ecf_kill_cmd is None:
             ecf_kill_cmd = pythonpath + path + "ECF_kill " \
-                                   "-sub %ENV_SUBMIT% " \
-                                   "-dir %ECF_OUT% " \
-                                   "-server %SERVER_CONFIG% " \
-                                   "--log %LOGFILE% " \
-                                   "-ecf_name %ECF_NAME% " \
-                                   "-ecf_tryno %ECF_TRYNO% " \
-                                   "-ecf_pass %ECF_PASS% " \
-                                   "-ecf_rid %ECF_RID% " \
-                                   "-submission_id %SUBMISSION_ID%"
+                                               "-sub %ENV_SUBMIT% " \
+                                               "-dir %ECF_OUT% " \
+                                               "-server %SERVER_CONFIG% " \
+                                               "--log %LOGFILE% " \
+                                               "-ecf_name %ECF_NAME% " \
+                                               "-ecf_tryno %ECF_TRYNO% " \
+                                               "-ecf_pass %ECF_PASS% " \
+                                               "-ecf_rid %ECF_RID% " \
+                                               "-submission_id %SUBMISSION_ID%"
         self.ecf_kill_cmd = ecf_kill_cmd
 
         variables = [
@@ -93,18 +121,34 @@ class SuiteDefinition(object):
         self.suite = EcflowSuite(name, variables=variables)
 
     def save_as_defs(self, def_file):
+        """Save definition file.
+
+        Args:
+            def_file (str): Name of definition file
+        """
         self.suite.save_as_defs(def_file)
 
 
-class EcflowNode(object):
-
-    """
-    A Node class is the abstract base class for Suite, Family and Task
+class EcflowNode():
+    """A Node class is the abstract base class for Suite, Family and Task.
 
     Every Node instance has a name, and a path relative to a suite
     """
 
     def __init__(self, name, node_type, parent, **kwargs):
+        """Construct the EcflowNode.
+
+        Args:
+            name (_type_): _description_
+            node_type (_type_): _description_
+            parent (_type_): _description_
+
+        Raises:
+            NotImplementedError: _description_
+            Exception: _description_
+            Exception: _description_
+
+        """
         self.name = name
         self.node_type = node_type
 
@@ -131,8 +175,8 @@ class EcflowNode(object):
         else:
             variables = []
 
-        for v in variables:
-            self.ecf_node.add_variable(v.name, v.value)
+        for var in variables:
+            self.ecf_node.add_variable(var.name, var.value)
 
         if triggers is not None:
             if isinstance(triggers, EcflowSuiteTriggers):
@@ -154,6 +198,16 @@ class EcflowNode(object):
                 raise Exception("Unknown defstatus")
 
     def add_part_trigger(self, triggers, mode=True):
+        """Add a part trigger.
+
+        Args:
+            triggers (_type_): _description_
+            mode (bool, optional): _description_. Defaults to True.
+
+        Raises:
+            Exception: _description_
+
+        """
         if isinstance(triggers, EcflowSuiteTriggers):
             if triggers.trigger_string is not None:
                 self.ecf_node.add_part_trigger(triggers.trigger_string, mode)
@@ -164,100 +218,195 @@ class EcflowNode(object):
 
 
 class EcflowNodeContainer(EcflowNode):
+    """Ecflow node container.
+
+    Args:
+        EcflowNode (EcflowNode): Parent class.
+    """
+
     def __init__(self, name, node_type, parent, **kwargs):
+        """Construct EcflowNodeContainer.
+
+        Args:
+            name (str): Name of the node container.
+            node_type (str): What kind of node.
+            parent (EcflowNode): Parent to this node.
+
+        """
         EcflowNode.__init__(self, name, node_type, parent, **kwargs)
 
 
 class EcflowSuite(EcflowNodeContainer):
+    """EcflowSuite.
+
+    Args:
+        EcflowNodeContainer (EcflowNodeContainer): A child of the EcflowNodeContainer class.
+    """
+
     def __init__(self, name, **kwargs):
+        """Construct the Ecflow suite.
+
+        Args:
+            name (_type_): _description_
+
+        """
         self.defs = ecflow.Defs({})
 
         EcflowNodeContainer.__init__(self, name, "suite", self.defs, **kwargs)
 
     def save_as_defs(self, def_file):
+        """Save defintion file.
+
+        Args:
+            def_file (str): Name of the definition file.
+        """
         self.defs.save_as_defs(def_file)
-        print("def file saved to " + def_file)
+        logging.info("def file saved to %s", def_file)
 
 
-class EcflowSuiteTriggers(object):
+class EcflowSuiteTriggers():
+    """Triggers to an ecflow suite."""
+
     def __init__(self, triggers, **kwargs):
-        mode = "AND"
-        if "mode" in kwargs:
-            mode = kwargs["mode"]
+        """Construct EcflowSuiteTriggers.
+
+        Args:
+            triggers (list): List of EcflowSuiteTrigger objects.
+
+        """
+        mode = kwargs.get("mode")
+        if mode is None:
+            mode = "AND"
+
         trigger_string = self.create_string(triggers, mode)
         self.trigger_string = trigger_string
 
     @staticmethod
-    def create_string(trigs, mode):
-        triggers = trigs
+    def create_string(triggers, mode):
+        """Create the trigger string.
+
+        Args:
+            triggers (list): List of trigger objects
+            mode     (str): Concatenation type.
+
+        Raises:
+            Exception: _description_
+            Exception: _description_
+
+        Returns:
+            str: The trigger string based on trigger objects.
+
+        """
         if not isinstance(triggers, list):
             triggers = [triggers]
 
         if len(triggers) == 0:
             raise Exception
 
-        trigger = "("
+        trigger_string = "("
         first = True
-        for t in triggers:
-            if t is not None:
-                a = ""
+        for trigger in triggers:
+            if trigger is not None:
+                cat = ""
                 if not first:
-                    a = " " + mode + " "
-                if isinstance(t, EcflowSuiteTriggers):
-                    trigger = trigger + a + t.trigger_string
+                    cat = " " + mode + " "
+                if isinstance(trigger, EcflowSuiteTriggers):
+                    trigger_string = trigger_string + cat + trigger.trigger_string
                 else:
-                    if isinstance(t, EcflowSuiteTrigger):
-                        trigger = trigger + a + t.node.path + " == " + t.mode
+                    if isinstance(trigger, EcflowSuiteTrigger):
+                        trigger_string = trigger_string + cat + trigger.node.path + " == " +\
+                                                                                    trigger.mode
                     else:
                         raise Exception("Trigger must be a Trigger object")
                 first = False
-        trigger = trigger + ")"
+        trigger_string = trigger_string + ")"
         # If no triggers were found/set
         if first:
-            trigger = None
-        return trigger
+            trigger_string = None
+        return trigger_string
 
     def add_triggers(self, triggers, mode="AND"):
-        a = " " + mode + " "
+        """Add triggers.
+
+        Args:
+            triggers (EcflowSuiteTriggers): The triggers
+            mode (str, optional): Cat mode. Defaults to "AND".
+
+        """
+        cat_string = " " + mode + " "
         trigger_string = self.create_string(triggers, mode)
         if trigger_string is not None:
-            self.trigger_string = self.trigger_string + a + trigger_string
+            self.trigger_string = self.trigger_string + cat_string + trigger_string
 
 
-class EcflowSuiteTrigger(object):
-    """
-    EcFlow Trigger in a suite
-    """
+class EcflowSuiteTrigger():
+    """EcFlow Trigger in a suite."""
+
     def __init__(self, node, mode="complete"):
-        """Create a EcFlow trigger object
+        """Create a EcFlow trigger object.
 
         Args:
             node (scheduler.EcflowNode): The node to trigger on
             mode (str):
+
         """
         self.node = node
         self.mode = mode
 
 
-class EcflowSuiteVariable(object):
+class EcflowSuiteVariable():
+    """A variable in an ecflow suite."""
+
     def __init__(self, name, value):
+        """Constuct the EcflowSuiteVariable.
+
+        Args:
+            name (str): Name
+            value (str): Value
+
+        """
         self.name = name
         self.value = value
 
 
 class EcflowSuiteFamily(EcflowNodeContainer):
+    """A family in ecflow.
+
+    Args:
+        EcflowNodeContainer (_type_): _description_
+    """
+
     def __init__(self, name, parent, **kwargs):
+        """Construct the family.
+
+        Args:
+            name (str): Name of the family.
+            parent (EcflowNodeContainer): Parent node.
+
+        """
         EcflowNodeContainer.__init__(self, name, "family", parent, **kwargs)
 
 
 class EcflowSuiteTask(EcflowNode):
+    """A task in an ecflow suite/family.
+
+    Args:
+        EcflowNode (EcflowNodeContainer): The node container.
+    """
+
     def __init__(self, name, parent, **kwargs):
+        """Constuct the EcflowSuiteTask.
+
+        Args:
+            name (str): Name of task
+            parent (EcflowNode): Parent node.
+
+        Raises:
+            Exception: _description_
+        """
         EcflowNode.__init__(self, name, "task", parent, **kwargs)
 
-        ecf_files = None
-        if "ecf_files" in kwargs:
-            ecf_files = kwargs["ecf_files"]
-
+        ecf_files = kwargs.get("ecf_files")
         if ecf_files is not None:
 
             if name == "default":

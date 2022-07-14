@@ -1,13 +1,28 @@
+"""Test ecflow."""
 import unittest
-import scheduler
 import os
 import json
+import logging
+import scheduler
+
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(pathname)s:%(lineno)s %(message)s',
+                    level=logging.DEBUG)
 
 
 class EcflowTest(unittest.TestCase):
+    """Test ecflow.
+
+    Args:
+        unittest (_type_): _description_
+
+    Raises:
+        Exception: _description_
+    """
 
     @staticmethod
     def test_suite():
+        """Test."""
         suite_name = "test_suite"
         def_file = "test_suite.def"
         joboutdir = "/tmp/host1/job/"
@@ -15,9 +30,9 @@ class EcflowTest(unittest.TestCase):
         os.makedirs(exp_dir, exist_ok=True)
         ecf_files = exp_dir + "/ecf/"
         os.makedirs(ecf_files, exist_ok=True)
-        fh = open(ecf_files + "/default.py", "w")
-        fh.write("print(\"Default python task\")")
-        fh.close()
+        with open(ecf_files + "/default.py", mode="w", encoding="utf-8") as file_handler:
+            file_handler.write("print(\"Default python task\")")
+
         env_submit_file = exp_dir + "/env_submit.json"
         env_submit = {
             "submit_types": ["background"],
@@ -28,14 +43,17 @@ class EcflowTest(unittest.TestCase):
                 ]
             }
         }
-        json.dump(env_submit, open(env_submit_file, "w"))
+        with open(env_submit_file, mode="w", encoding="utf-8") as file_handler:
+            json.dump(env_submit, file_handler)
         server_config_file = exp_dir + "/env_server.json"
         server_config = {
             "ECF_HOST": "localhost"
         }
-        json.dump(server_config, open(server_config_file, "w"))
+        with open(server_config_file, mode="w", encoding="utf-8") as file_handler:
+            json.dump(server_config, file_handler)
         server_log = exp_dir + "/ECF.log"
-        defs = scheduler.SuiteDefinition(suite_name, def_file, joboutdir, ecf_files, env_submit_file,
+        defs = scheduler.SuiteDefinition(suite_name, def_file, joboutdir, ecf_files,
+                                         env_submit_file,
                                          server_config_file, server_log)
         defs.suite.ecf_node.add_variable("DTG", "YYYYMMDDHH")
         task1 = scheduler.EcflowSuiteTask("My_task1", defs.suite, ecf_files=ecf_files)
@@ -44,6 +62,7 @@ class EcflowTest(unittest.TestCase):
 
     @staticmethod
     def test_client():
+        """Test."""
         exp = "test_client"
 
         joboutdir = "/tmp/host1/job/"
@@ -57,8 +76,10 @@ class EcflowTest(unittest.TestCase):
                 "HOST": "0"
             }
         }
-        json.dump(env_submit, open(env_submit_file, "w"))
-        json.dump({"ECF_HOST": "localhost"}, open(env_server_file, "w"))
+        with open(env_submit_file, mode="w", encoding="utf-8") as file_handler:
+            json.dump(env_submit, file_handler)
+        with open(env_server_file, mode="w", encoding="utf-8") as file_handler:
+            json.dump({"ECF_HOST": "localhost"}, file_handler)
         # Dry submit
         argv = [
             "-sub", env_submit_file,
@@ -78,6 +99,8 @@ class EcflowTest(unittest.TestCase):
         argv = [
             "-dir", joboutdir,
             "-sub", env_submit_file,
+            "-server", env_server_file,
+            "--log", "logfile",
             "-ecf_name", exp + "/dry_submit",
             "-ecf_pass", "12345",
             "-ecf_tryno", "1",
@@ -106,7 +129,7 @@ class EcflowTest(unittest.TestCase):
 
     @staticmethod
     def test_ecflow_client():
-
+        """Test."""
         ecf_host = "localhost"
         ecf_port = (int(os.getuid()) + 1500)
         logfile = "unittest_ECF.log"
@@ -130,14 +153,14 @@ class EcflowTest(unittest.TestCase):
         ecf_tryno = "1"
         task = scheduler.EcflowTask(ecf_name, ecf_tryno, ecf_pass, ecf_rid=None)
 
-        with scheduler.EcflowClient(server, task) as ci:
+        with scheduler.EcflowClient(server, task):
             print("Running task ")
             task.submission_id = "test.12345"
             server.update_submission_id(task)
             server.update_log("Hello log")
 
     def test_ecflow_client_failed(self):
-
+        """Test failesd client."""
         ecf_host = "localhost"
         ecf_port = (int(os.getuid()) + 1500)
         logfile = "unittest_ECF_failed.log"
@@ -160,7 +183,7 @@ class EcflowTest(unittest.TestCase):
         ecf_tryno = "1"
         task = scheduler.EcflowTask(ecf_name, ecf_tryno, ecf_pass, ecf_rid=None)
 
-        with self.assertRaises(Exception) as cm:
-            with scheduler.EcflowClient(server, task) as ci:
+        with self.assertRaises(Exception):
+            with scheduler.EcflowClient(server, task):
                 print("Running task ")
-                raise Exception()
+                raise Exception("This should be failing!")
