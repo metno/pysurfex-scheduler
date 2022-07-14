@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Python abstraction layer for a scheduling system like Ecflow &#8212; Python abstraction for scheduler (pysurfex-scheduler)  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -13,6 +13,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -37,10 +38,10 @@
   <img alt="https://coveralls.io/repos/github/metno/pysurfex-scheduler/badge.svg?branch=master" id="readme" src="https://coveralls.io/repos/github/metno/pysurfex-scheduler/badge.svg?branch=master" />
 <p><a class="reference external" href="https://coveralls.io/github/metno/pysurfex-scheduler">https://coveralls.io/github/metno/pysurfex-scheduler</a></p>
 <section id="python-abstraction-layer-for-a-scheduling-system-like-ecflow">
-<h1>Python abstraction layer for a scheduling system like Ecflow<a class="headerlink" href="#python-abstraction-layer-for-a-scheduling-system-like-ecflow" title="Permalink to this headline">¶</a></h1>
+<h1>Python abstraction layer for a scheduling system like Ecflow<a class="headerlink" href="#python-abstraction-layer-for-a-scheduling-system-like-ecflow" title="Permalink to this heading">¶</a></h1>
 <p>See online documentation in <a class="reference external" href="https://metno.github.io/pysurfex-scheduler/">https://metno.github.io/pysurfex-scheduler/</a></p>
 <section id="installation-of-pregenerated-packages-from-pypi-pip">
-<h2>Installation of pregenerated packages from pypi (pip)<a class="headerlink" href="#installation-of-pregenerated-packages-from-pypi-pip" title="Permalink to this headline">¶</a></h2>
+<h2>Installation of pregenerated packages from pypi (pip)<a class="headerlink" href="#installation-of-pregenerated-packages-from-pypi-pip" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install pysurfex-scheduler
 </pre></div>
 </div>
@@ -50,7 +51,7 @@
 </div>
 </section>
 <section id="installation-on-debian-based-linux-system">
-<h2>Installation on debian based Linux system<a class="headerlink" href="#installation-on-debian-based-linux-system" title="Permalink to this headline">¶</a></h2>
+<h2>Installation on debian based Linux system<a class="headerlink" href="#installation-on-debian-based-linux-system" title="Permalink to this heading">¶</a></h2>
 <p>Install the required pacakges (some might be obsolete if the pip packages contain the needed depedencies):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get update
 <span class="c1"># Python tools</span>
@@ -62,7 +63,7 @@ sudo apt-get install ecflow-server ecflow-client python3-ecflow
 <p>The following depencies are needed. Install the non-standard ones e.g. with pip or your system installation system.</p>
 </section>
 <section id="general-dependencies-from-pypi">
-<h2>General dependencies (from pypi)<a class="headerlink" href="#general-dependencies-from-pypi" title="Permalink to this headline">¶</a></h2>
+<h2>General dependencies (from pypi)<a class="headerlink" href="#general-dependencies-from-pypi" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>toml
 json<span class="p">;</span> python_version &lt; <span class="s1">&#39;3&#39;</span>
 </pre></div>
@@ -83,7 +84,7 @@ folder:</p>
 </div>
 </section>
 <section id="create-documentation">
-<h2>Create documentation<a class="headerlink" href="#create-documentation" title="Permalink to this headline">¶</a></h2>
+<h2>Create documentation<a class="headerlink" href="#create-documentation" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs
 <span class="c1"># Create html documentation</span>
 make html
@@ -95,7 +96,7 @@ make latexpdf
 </div>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scheduler</span>
 
 <span class="c1"># EcFlow variables parsed in EcFlow job</span>
@@ -159,7 +160,7 @@ make latexpdf
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -176,7 +177,7 @@ make latexpdf
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

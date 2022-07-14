@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +12,7 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -35,21 +36,40 @@
           <div class="body" role="main">
             
   <h1>Source code for scheduler.submission</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">shutil</span>
+<span></span><span class="sd">&quot;&quot;&quot;Job submission setup.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 
 <div class="viewcode-block" id="EcflowSubmitTask"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask">[docs]</a><span class="k">class</span> <span class="nc">EcflowSubmitTask</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Submit class for ecflow.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">env_submit</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">,</span>
                  <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dbfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="s2">&quot;#!/usr/bin/env python3&quot;</span><span class="p">,</span>
-                 <span class="n">ensmbr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">submit_exceptions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coldstart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">env_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">communication</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">ensmbr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">submit_exceptions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coldstart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">env_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct a ecflow submission task.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task</span>
+<span class="sd">            env_submit (_type_): _description_</span>
+<span class="sd">            server (scheduler.Server): Server</span>
+<span class="sd">            joboutdir (_type_): _description_</span>
+<span class="sd">            stream (int, optional): Stream. Defaults to None.</span>
+<span class="sd">            dbfile (str, optional):  Data base for monitoring. Defaults to None.</span>
+<span class="sd">            interpreter (str, optional): Python interpreter. Defaults to &quot;#!/usr/bin/env python3&quot;.</span>
+<span class="sd">            ensmbr (str, optional): Ensemble member. Defaults to None.</span>
+<span class="sd">            submit_exceptions (dict, optional): Task submission exceptions. Defaults to None.</span>
+<span class="sd">            coldstart (bool, optional): Cold start. Defaults to False.</span>
+<span class="sd">            env_file (str, optional): Environment file. Defaults to None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">task</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env_file</span> <span class="o">=</span> <span class="n">env_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ecflow_server</span> <span class="o">=</span> <span class="n">server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coldstart</span> <span class="o">=</span> <span class="n">coldstart</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">communication</span> <span class="o">=</span> <span class="n">communication</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ensmbr</span> <span class="o">=</span> <span class="n">ensmbr</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensmbr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -59,109 +79,141 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="o">=</span> <span class="n">dbfile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Parse Env_submit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span> <span class="o">=</span> <span class="n">TaskSettings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="n">env_submit</span><span class="p">,</span> <span class="n">joboutdir</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="n">interpreter</span><span class="p">,</span>
                                           <span class="n">submit_exceptions</span><span class="o">=</span><span class="n">submit_exceptions</span><span class="p">,</span> <span class="n">coldstart</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">get_submission_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">get_submission_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecflow_server</span><span class="p">,</span>
+                                         <span class="n">db_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EcflowSubmitTask.write_header"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.write_header">[docs]</a>    <span class="k">def</span> <span class="nf">write_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">interpreter</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="EcflowSubmitTask.write_header"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.write_header">[docs]</a>    <span class="k">def</span> <span class="nf">write_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write header to file handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_handler (_type_): _description_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _type_: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">interpreter</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Batch commands</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Batch commands</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># Loop twice, first comments (likely to be batch commands)</span>
-            <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">setting</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="c1"># print(str(self.header[setting]))</span>
-                    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            
+                    <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="c1"># Host environment</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Host specific environment settings in python syntax:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fh_env</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh_env</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-                    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Host specific environment settings in python syntax:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh_env</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh_env</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                        <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                 <span class="n">fh_env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Task specific settings:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Task specific settings:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">setting</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="c1"># print(str(self.header[setting]))</span>
-                    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-             
+                    <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="n">wrapper</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">wrapper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">wrapper</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">wrapper</span><span class="p">)</span>
 
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#Python script:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#Python script:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wrapper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">host</span></div>
 
-<div class="viewcode-block" id="EcflowSubmitTask.write_trailer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.write_trailer">[docs]</a>    <span class="k">def</span> <span class="nf">write_trailer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
+<div class="viewcode-block" id="EcflowSubmitTask.write_trailer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.write_trailer">[docs]</a>    <span class="k">def</span> <span class="nf">write_trailer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write trailer in job file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_handler (_type_): _description_</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">trailer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">trailer</span><span class="p">:</span>
-                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">trailer</span><span class="p">[</span><span class="n">setting</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">trailer</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EcflowSubmitTask.write_job"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.write_job">[docs]</a>    <span class="k">def</span> <span class="nf">write_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write job file.&quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Job file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_job</span><span class="p">)</span>
         <span class="n">ecf_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_job</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">ecf_job</span> <span class="o">+</span> <span class="s2">&quot;.tmp&quot;</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ecf_job</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ecf_job</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">wrapper</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_header</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
-        <span class="n">job_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">job_fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@WRAPPER_TO_BE_SUBSTITUTED@&quot;</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@HOST_TO_BE_SUBSTITUTED@&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="n">job_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_trailer</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ecf_job</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">wrapper</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_header</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">job_fh</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">job_fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@WRAPPER_TO_BE_SUBSTITUTED@&quot;</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@HOST_TO_BE_SUBSTITUTED@&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+                    <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_trailer</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;chmod u+x &quot;</span> <span class="o">+</span> <span class="n">ecf_job</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EcflowSubmitTask.submit"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSubmitTask.submit">[docs]</a>    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sumit task.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;OUTPUT&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;OUTPUT&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">set_output</span><span class="p">()})</span>
             <span class="k">if</span> <span class="s2">&quot;NAME&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;NAME&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">set_job_name</span><span class="p">()})</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_job</span><span class="p">()</span>
 
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecflow_server</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;You must set server to submit!&quot;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;force_complete&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;force_complete&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecflow_server</span><span class="o">.</span><span class="n">force_complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sub.set_submit_cmd&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;sub.set_submit_cmd&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">set_submit_cmd</span><span class="p">()</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;submit_job&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;submit_job&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">submit_job</span><span class="p">()</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;set_jobid&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;set_jobid&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">set_jobid</span><span class="p">()</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;job_id&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job_id&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">submission_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="o">.</span><span class="n">job_id</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;update_submission_id&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;update_submission_id&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecflow_server</span><span class="o">.</span><span class="n">update_submission_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
             <span class="c1"># Supposed to handle abort self unless killed</span>
             <span class="k">pass</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SubmitException</span><span class="p">(</span><span class="s2">&quot;Submission failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span></div></div>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Submission failed {str(error)}&quot;</span>
+            <span class="k">raise</span> <span class="n">SubmitException</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span></div></div>
 
 
 <div class="viewcode-block" id="TaskSettings"><a class="viewcode-back" href="../../index.html#scheduler.TaskSettings">[docs]</a><span class="k">class</span> <span class="nc">TaskSettings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the task specific setttings.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">submission_defs</span><span class="p">,</span> <span class="n">joboutdirs</span><span class="p">,</span> <span class="n">submit_exceptions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interpreter</span><span class="o">=</span><span class="s2">&quot;#!/usr/bin/env python3&quot;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">submission_defs</span><span class="p">,</span> <span class="n">joboutdirs</span><span class="p">,</span> <span class="n">submit_exceptions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">interpreter</span><span class="o">=</span><span class="s2">&quot;#!/usr/bin/env python3&quot;</span><span class="p">,</span>
                  <span class="n">complete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">coldstart</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct the task specific settings.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task</span>
+<span class="sd">            submission_defs (dict): Submission definitions</span>
+<span class="sd">            joboutdirs (_type_): _description_</span>
+<span class="sd">            submit_exceptions (_type_, optional): _description_. Defaults to None.</span>
+<span class="sd">            interpreter (str, optional): Python interpreter. Defaults to &quot;#!/usr/bin/env python3&quot;.</span>
+<span class="sd">            complete (bool, optional): Set to complete. Defaults to False.</span>
+<span class="sd">            coldstart (bool, optional): Coldstart. Defaults to False.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: _description_</span>
+<span class="sd">            Exception: _description_</span>
+<span class="sd">            Exception: _description_</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">task</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">submission_defs</span> <span class="o">=</span> <span class="n">submission_defs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">{}</span>
@@ -175,6 +227,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_kill_cmd</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coldstart</span> <span class="o">=</span> <span class="n">coldstart</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_variables</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="n">submit_exceptions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_exceptions</span><span class="p">(</span><span class="n">submit_exceptions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_submission_defs</span><span class="p">()</span>
@@ -189,6 +243,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No joboutdir defined for HOST 0&quot;</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task HOST is &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">in</span> <span class="n">joboutdirs</span><span class="p">:</span>
             <span class="n">joboutdir_at_host</span> <span class="o">=</span> <span class="n">joboutdirs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -202,7 +257,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ecf_jobout_at_host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_ecf_jobout</span><span class="p">(</span><span class="n">joboutdir_at_host</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TaskSettings.check_exceptions"><a class="viewcode-back" href="../../index.html#scheduler.TaskSettings.check_exceptions">[docs]</a>    <span class="k">def</span> <span class="nf">check_exceptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">submit_exceptions</span><span class="p">):</span>
-        <span class="c1"># Check exceptions</span>
+        <span class="sd">&quot;&quot;&quot;Possibility to create submission exceptions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            submit_exceptions (_type_): _description_</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">submit_exceptions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">submit_exceptions</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;complete&quot;</span><span class="p">:</span>
@@ -211,18 +271,19 @@
                             <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_task</span><span class="p">:</span>
                                 <span class="k">if</span> <span class="n">submit_exceptions</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="s2">&quot;task&quot;</span><span class="p">][</span><span class="n">task</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;is_coldstart&quot;</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coldstart</span><span class="p">:</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="s2">&quot;Task &quot;</span> <span class="o">+</span> <span class="n">task</span> <span class="o">+</span> <span class="s2">&quot; complete due to cold start&quot;</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Task </span><span class="si">{task}</span><span class="s2"> complete due to cold start&quot;</span>
                     <span class="k">if</span> <span class="s2">&quot;family&quot;</span> <span class="ow">in</span> <span class="n">submit_exceptions</span><span class="p">[</span><span class="n">state</span><span class="p">]:</span>
                         <span class="k">for</span> <span class="n">family</span> <span class="ow">in</span> <span class="n">submit_exceptions</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">]:</span>
                             <span class="k">for</span> <span class="n">ecf_family</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_families</span><span class="p">:</span>
                                 <span class="k">if</span> <span class="n">family</span> <span class="o">==</span> <span class="n">ecf_family</span><span class="p">:</span>
                                     <span class="k">if</span> <span class="n">submit_exceptions</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="s2">&quot;family&quot;</span><span class="p">][</span><span class="n">family</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;is_coldstart&quot;</span><span class="p">:</span>
                                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coldstart</span><span class="p">:</span>
-                                            <span class="bp">self</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="s2">&quot;Family &quot;</span> <span class="o">+</span> <span class="n">family</span> <span class="o">+</span> <span class="s2">&quot; complete due to cold start&quot;</span></div>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Family </span><span class="si">{family}</span><span class="s2"> complete due to &quot;</span> \
+                                                            <span class="s2">&quot;cold start&quot;</span></div>
 
 <div class="viewcode-block" id="TaskSettings.process_settings"><a class="viewcode-back" href="../../index.html#scheduler.TaskSettings.process_settings">[docs]</a>    <span class="k">def</span> <span class="nf">process_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="sd">&quot;&quot;&quot;Process the settings.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># print(&quot;key=&quot;, key, &quot; value=&quot;, value)</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;TRAILER&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">trailer</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
@@ -236,6 +297,8 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">remote_kill_cmd</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;INTERPRETER&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">interpreter</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;SUBMIT_VARIABLES&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">submit_variables</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;WRAPPER&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;HOST&quot;</span><span class="p">:</span>
@@ -246,6 +309,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
 
 <div class="viewcode-block" id="TaskSettings.parse_submission_defs"><a class="viewcode-back" href="../../index.html#scheduler.TaskSettings.parse_submission_defs">[docs]</a>    <span class="k">def</span> <span class="nf">parse_submission_defs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse the submssion definitions.&quot;&quot;&quot;</span>
         <span class="n">ecf_task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_task</span>
         <span class="n">task_settings</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># print(&quot;parse&quot;, ecf_task)</span>
@@ -255,11 +319,11 @@
         <span class="n">submit_types</span> <span class="o">=</span> <span class="n">all_defs</span><span class="p">[</span><span class="s2">&quot;submit_types&quot;</span><span class="p">]</span>
         <span class="n">default_submit_type</span> <span class="o">=</span> <span class="n">all_defs</span><span class="p">[</span><span class="s2">&quot;default_submit_type&quot;</span><span class="p">]</span>
         <span class="n">task_submit_type</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">submit_types</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">all_defs</span> <span class="ow">and</span> <span class="s2">&quot;tasks&quot;</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">st</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">st</span><span class="p">][</span><span class="s2">&quot;tasks&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">ecf_task</span><span class="p">:</span>
-                        <span class="n">task_submit_type</span> <span class="o">=</span> <span class="n">st</span>
+        <span class="k">for</span> <span class="n">s_t</span> <span class="ow">in</span> <span class="n">submit_types</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s_t</span> <span class="ow">in</span> <span class="n">all_defs</span> <span class="ow">and</span> <span class="s2">&quot;tasks&quot;</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">s_t</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">tname</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">s_t</span><span class="p">][</span><span class="s2">&quot;tasks&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">tname</span> <span class="o">==</span> <span class="n">ecf_task</span><span class="p">:</span>
+                        <span class="n">task_submit_type</span> <span class="o">=</span> <span class="n">s_t</span>
         <span class="k">if</span> <span class="n">task_submit_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">task_submit_type</span> <span class="o">=</span> <span class="n">default_submit_type</span>
 
@@ -270,73 +334,134 @@
 
         <span class="n">ex</span> <span class="o">=</span> <span class="s2">&quot;task_exceptions&quot;</span>
         <span class="k">if</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">ecf_task</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">][</span><span class="n">t</span><span class="p">]:</span>
-                        <span class="n">task_settings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">setting</span><span class="p">:</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="n">setting</span><span class="p">]})</span>
+            <span class="k">for</span> <span class="n">tname</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">tname</span> <span class="o">==</span> <span class="n">ecf_task</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">setting</span> <span class="ow">in</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">][</span><span class="n">tname</span><span class="p">]:</span>
+                        <span class="n">task_settings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">setting</span><span class="p">:</span> <span class="n">all_defs</span><span class="p">[</span><span class="n">ex</span><span class="p">][</span><span class="n">tname</span><span class="p">][</span><span class="n">setting</span><span class="p">]})</span>
 
         <span class="c1"># print(task_settings)</span>
         <span class="k">return</span> <span class="n">task_settings</span></div></div>
 
 
 <div class="viewcode-block" id="SubmitException"><a class="viewcode-back" href="../../index.html#scheduler.SubmitException">[docs]</a><span class="k">class</span> <span class="nc">SubmitException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Submit exception.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="SubmitException.__init__"><a class="viewcode-back" href="../../index.html#scheduler.SubmitException.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct SubmitException.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): Exception message.</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="KillException"><a class="viewcode-back" href="../../index.html#scheduler.KillException">[docs]</a><span class="k">class</span> <span class="nc">KillException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Kill exception.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="KillException.__init__"><a class="viewcode-back" href="../../index.html#scheduler.KillException.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct KillException.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): Exception message.</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_kill_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="StatusException"><a class="viewcode-back" href="../../index.html#scheduler.StatusException">[docs]</a><span class="k">class</span> <span class="nc">StatusException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Status exception.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="StatusException.__init__"><a class="viewcode-back" href="../../index.html#scheduler.StatusException.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct status exception.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (str): Exception message.</span>
+<span class="sd">            task (scheduler.EcflowTask): task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># joboutdir = task.joboutdir</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_status_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">file_handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="get_submission_object"><a class="viewcode-back" href="../../index.html#scheduler.get_submission_object">[docs]</a><span class="k">def</span> <span class="nf">get_submission_object</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_submission_object"><a class="viewcode-back" href="../../index.html#scheduler.get_submission_object">[docs]</a><span class="k">def</span> <span class="nf">get_submission_object</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the submission object constructed from a submit type.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        task (scheduler.EcflowTask): Task.</span>
+<span class="sd">        task_settings (TaskSettings): Task settings</span>
+<span class="sd">        server (scheduler.Server): Server.</span>
+<span class="sd">        db_file (str, optional): Data base for monitoring.. Defaults to None.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NotImplementedError: _description_</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        SubmissionBaseClass: Return a submission object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">submit_type</span> <span class="o">=</span> <span class="n">task_settings</span><span class="o">.</span><span class="n">submit_type</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">submit_type</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Submit type: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">submit_type</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">submit_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pbs&quot;</span><span class="p">:</span>
-        <span class="n">sub</span> <span class="o">=</span> <span class="n">PBSSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">PBSSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">submit_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;slurm&quot;</span><span class="p">:</span>
-        <span class="n">sub</span> <span class="o">=</span> <span class="n">SlurmSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">SlurmSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">submit_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;grid_engine&quot;</span><span class="p">:</span>
-        <span class="n">sub</span> <span class="o">=</span> <span class="n">GridEngineSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">GridEngineSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">submit_type</span> <span class="o">==</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span>
-        <span class="n">sub</span> <span class="o">=</span> <span class="n">BackgroundSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">BackgroundSubmission</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
     <span class="k">return</span> <span class="n">sub</span></div>
 
 
 <div class="viewcode-block" id="SubmissionBaseClass"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass">[docs]</a><span class="k">class</span> <span class="nc">SubmissionBaseClass</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote_submit_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote_kill_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="sd">&quot;&quot;&quot;An abstract class for submssion to be implemented by all children.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ABC (_type_): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote_submit_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">remote_kill_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">remote_status_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct the base class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            db_file (str, optional): Data base for monitoring. Defaults to None.</span>
+<span class="sd">            remote_submit_cmd (str, optional): Remote submit command. Defaults to None.</span>
+<span class="sd">            remote_kill_cmd (str, optional): Remote kill command. Defaults to None.</span>
+<span class="sd">            remote_status_cmd (str, optional): Remote status command. Defaults to None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">task</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span> <span class="o">=</span> <span class="n">task_settings</span>
-        <span class="c1"># self.sub_logfile = sub_logfile</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="o">=</span> <span class="n">db_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">submission_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -350,68 +475,104 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_status_cmd</span> <span class="o">=</span> <span class="n">remote_status_cmd</span>
 
 <div class="viewcode-block" id="SubmissionBaseClass.update_db"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.update_db">[docs]</a>    <span class="k">def</span> <span class="nf">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">job_id</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="sd">&quot;&quot;&quot;Update the data base.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            job_id (str): Job identifier.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+                <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">job_id</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.clear_db"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.clear_db">[docs]</a>    <span class="k">def</span> <span class="nf">clear_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;Remove database.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_submit_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_submit_cmd">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set submit command.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_jobid">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job id.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.get_logfile"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.get_logfile">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set logfile.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.submit_job"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.submit_job">[docs]</a>    <span class="k">def</span> <span class="nf">submit_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Submit job.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SUBMIT COMMAND: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_submit_cmd</span><span class="p">)</span>
             <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_logfile</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">logfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">subfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-                <span class="n">subfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">subfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-                <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subfile</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subfile</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-                <span class="n">subfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">subfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">subfile</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">update_log</span><span class="p">(</span><span class="s2">&quot;ECF_JOB_CMD: &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+                    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subfile</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subfile</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
                 <span class="n">ret</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span>
                 <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Submit command failed with error code &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">logfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> 
-                <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">stdout</span><span class="o">=</span><span class="n">logfile</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
-                
-            <span class="c1"># print(self.submit_cmd)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">update_log</span><span class="p">(</span><span class="s2">&quot;ECF_JOB_CMD: &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">logfile</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">logfile</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_jobid</span><span class="p">()</span>
-            <span class="c1"># print(self.job_id)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="n">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.kill_job"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.kill_job">[docs]</a>    <span class="k">def</span> <span class="nf">kill_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Kill task.</span>
 
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kill_job_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">killfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_kill_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
             <span class="c1"># print(self.kill_job_cmd)</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kill_job_cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_kill_cmd</span><span class="p">)</span>
-            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">killfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Kill job &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_job_at_host</span> <span class="o">+</span> <span class="s2">&quot; with command:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">killfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">kill_file</span><span class="p">:</span>
+                <span class="n">kill_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Kill job </span><span class="si">{self.task_settings.ecf_job_at_host}</span><span class="s2"> with command:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">kill_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{cmd}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">kill_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
-            <span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">killfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+            <span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">killfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
             <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span>
@@ -423,115 +584,226 @@
                 <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
-            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">*** KILLED BY ECF_kill ****&quot;</span><span class="p">)</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+            <span class="n">log_handler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">log_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">*** KILLED BY ECF_kill ****&quot;</span><span class="p">)</span>
+            <span class="n">log_handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">log_handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_job_status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_job_status">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+        <span class="sd">&quot;&quot;&quot;Set job status.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;General status method.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            StatusException: _description_</span>
+<span class="sd">            StatusException: _description_</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;No job ID was provided!&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_job_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;Setting of status command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;Setting of status command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;No status command set for &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_type</span><span class="p">,</span>
                                   <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">job_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;Status command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;Status command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.job_status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.job_status">[docs]</a>    <span class="k">def</span> <span class="nf">job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;General job status method.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">statusfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_status_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_status_cmd</span><span class="p">)</span>
-            <span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">statusfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">statusfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span>
             <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Status command failed with error code &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.kill"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;General kill method.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KillException: _description_</span>
+<span class="sd">            KillException: _description_</span>
+<span class="sd">            KillException: _description_</span>
+<span class="sd">            KillException: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;No job ID was provided!&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_kill_cmd</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;Setting of kill command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;Setting of kill command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kill_job_cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;No kill command set for &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;No kill command set for &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_type</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_job</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;Kill failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;Kill failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_kill_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_kill_cmd">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_kill_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set kill command.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_remote_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_remote_cmd">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">remote_cmd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set remote command.</span>
+
+<span class="sd">        Pre-pending a remote command statement (e.g. ssh)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">remote_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="n">remote_cmd</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">cmd</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_output"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_output">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set output.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="SubmissionBaseClass.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_job_name">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.</span>
+
+<span class="sd">        Must be implemented.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: If not implemented.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
 <div class="viewcode-block" id="BackgroundSubmission"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission">[docs]</a><span class="k">class</span> <span class="nc">BackgroundSubmission</span><span class="p">(</span><span class="n">SubmissionBaseClass</span><span class="p">):</span>
-<div class="viewcode-block" id="BackgroundSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span></div>
+    <span class="sd">&quot;&quot;&quot;Backgrpund submission.</span>
+
+<span class="sd">    A subprocess on the host system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        SubmissionBaseClass (_type_): _description_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BackgroundSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct BackgroundSubmission.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            db_file (str, optional):  Data base for monitoring. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_submit_cmd"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_submit_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set submit command.&quot;&quot;&quot;</span>
         <span class="n">ecf_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_job</span>
+        <span class="n">submit_vars</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">submit_vars</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;export </span><span class="si">{key}</span><span class="s2">=</span><span class="si">{val}</span><span class="s2">; </span><span class="si">{submit_vars}</span><span class="s2">&quot;</span>
+
+        <span class="n">ecf_job</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{submit_vars}</span><span class="s2"> </span><span class="si">{ecf_job}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ecf_job</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="n">ecf_job</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_submit_cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job id.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.get_logfile"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.get_logfile">[docs]</a>    <span class="k">def</span> <span class="nf">get_logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the logfile.&quot;&quot;&quot;</span>
         <span class="n">ecf_jobout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_jobout</span>
         <span class="k">return</span> <span class="n">ecf_jobout</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_kill_cmd"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_kill_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_kill_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the kill command.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;kill -9 &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_job_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_kill_cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_job_status"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_job_status">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;set_job_status &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Set the job status.&quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;set_job_status </span><span class="si">%s</span><span class="s2"> cmd: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span> <span class="o">=</span> <span class="s2">&quot;ps -auxq &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_output"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_output">[docs]</a>    <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set output.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;# Background jobs use standard output/error</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div>
 
 <div class="viewcode-block" id="BackgroundSubmission.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission.set_job_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;# Background jobs get job name from process name</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div></div>
 
 
 <div class="viewcode-block" id="BatchSubmission"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission">[docs]</a><span class="k">class</span> <span class="nc">BatchSubmission</span><span class="p">(</span><span class="n">SubmissionBaseClass</span><span class="p">):</span>
-<div class="viewcode-block" id="BatchSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
-        <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;A general batch system class for a task using a job scheduler system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        SubmissionBaseClass (_type_): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BatchSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">kill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct the BatchSubmission object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            db_file (str, optional):  Data base for monitoring. Defaults to None.</span>
+<span class="sd">            sub (str, optional): Submission command. Defaults to None.</span>
+<span class="sd">            stat (str, optional): Status command. Defaults to None.</span>
+<span class="sd">            kill (str, optional): Kill command. Defaults to None.</span>
+<span class="sd">            prefix (str, optional): Batch prefix. Defaults to &quot;#&quot;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_sub</span> <span class="o">=</span> <span class="n">sub</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_stat</span> <span class="o">=</span> <span class="n">stat</span>
@@ -539,26 +811,41 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="BatchSubmission.set_submit_cmd"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_submit_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_sub</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_job_at_host</span>
+<div class="viewcode-block" id="BatchSubmission.set_submit_cmd"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_submit_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set submit command.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            remote_cmd (_type_, optional): _description_. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">submit_vars</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">submit_vars</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-v </span><span class="si">{key}</span><span class="s2">=</span><span class="si">{val}</span><span class="s2"> </span><span class="si">{submit_vars}</span><span class="s2">&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.batch_sub}</span><span class="s2"> </span><span class="si">{submit_vars}</span><span class="s2"> </span><span class="si">{self.task_settings.ecf_job_at_host}</span><span class="s2">&quot;</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">remote_submit_cmd</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span> <span class="o">=</span> <span class="n">cmd</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job id.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.get_logfile"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.get_logfile">[docs]</a>    <span class="k">def</span> <span class="nf">get_logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the logfile.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.set_kill_cmd"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_kill_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">set_kill_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set kill command.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_job_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_kill</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.set_job_status"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_job_status">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job status.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">job_status_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_stat</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.set_output"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_output">[docs]</a>    <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set output.&quot;&quot;&quot;</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_jobout_at_host</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -o &quot;</span> <span class="o">+</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -e &quot;</span> <span class="o">+</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -566,27 +853,48 @@
         <span class="k">return</span> <span class="n">string</span></div>
 
 <div class="viewcode-block" id="BatchSubmission.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.BatchSubmission.set_job_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -N &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div></div>
 
 
 <div class="viewcode-block" id="PBSSubmission"><a class="viewcode-back" href="../../index.html#scheduler.PBSSubmission">[docs]</a><span class="k">class</span> <span class="nc">PBSSubmission</span><span class="p">(</span><span class="n">BatchSubmission</span><span class="p">):</span>
-<div class="viewcode-block" id="PBSSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.PBSSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;qsub&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;qstat -j&quot;</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;qdel&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#PBS&quot;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Job submission on a PBS job scheduler.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        BatchSubmission (_type_): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PBSSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.PBSSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;qsub&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;qstat -j&quot;</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;qdel&quot;</span><span class="p">,</span>
+                 <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#PBS&quot;</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct the PBS job submission object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            sub (str, optional): Submission command. Defaults to &quot;qsub&quot;.</span>
+<span class="sd">            stat (str, optional): Status command. Defaults to &quot;qstat -j&quot;.</span>
+<span class="sd">            kill (str, optional): Kill command. Defaults to &quot;qdel&quot;.</span>
+<span class="sd">            prefix (str, optional): PBS prefix. Defaults to &quot;#PBS&quot;.</span>
+<span class="sd">            db_file (str, optional):  Data base for monitoring. Defaults to None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span>
+                                 <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">15</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="PBSSubmission.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.PBSSubmission.set_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Set job id.&quot;&quot;&quot;</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file_handler</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
         <span class="n">answer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">answer</span> <span class="o">=</span> <span class="n">line</span>
 
-        <span class="c1">#expected_len = 7</span>
+        <span class="c1"># expected_len = 7</span>
         <span class="n">expected_len</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">words</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
@@ -598,28 +906,50 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Expected &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expected_len</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; in output. Got &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="PBSSubmission.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.PBSSubmission.set_job_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -N &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div></div>
 
 
 <div class="viewcode-block" id="SlurmSubmission"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission">[docs]</a><span class="k">class</span> <span class="nc">SlurmSubmission</span><span class="p">(</span><span class="n">BatchSubmission</span><span class="p">):</span>
-<div class="viewcode-block" id="SlurmSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;sbatch&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;squeue -j&quot;</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;scancel&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#SBATCH&quot;</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;General slurm submssion class.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        BatchSubmission (_type_): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SlurmSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;sbatch&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;squeue -j&quot;</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;scancel&quot;</span><span class="p">,</span>
+                 <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#SBATCH&quot;</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct SlurmSubmission.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task.</span>
+<span class="sd">            task_settings (TaskSettings): Task settings.</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            sub (str, optional): Submission command. Defaults to &quot;sbatch&quot;.</span>
+<span class="sd">            stat (str, optional): Status command. Defaults to &quot;squeue -j&quot;.</span>
+<span class="sd">            kill (str, optional): Kill command. Defaults to &quot;scancel&quot;.</span>
+<span class="sd">            prefix (str, optional): Slurm prefix. Defaults to &quot;#SBATCH&quot;.</span>
+<span class="sd">            db_file (_type_, optional):  Data base for monitoring. Defaults to None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span>
+                                 <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="SlurmSubmission.set_output"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission.set_output">[docs]</a>    <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set output.&quot;&quot;&quot;</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_jobout_at_host</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -o &quot;</span> <span class="o">+</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -e &quot;</span> <span class="o">+</span> <span class="n">logfile</span> 
+        <span class="n">string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -e &quot;</span> <span class="o">+</span> <span class="n">logfile</span>
         <span class="k">return</span> <span class="n">string</span></div>
 
 <div class="viewcode-block" id="SlurmSubmission.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission.set_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Set job id.&quot;&quot;&quot;</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file_handler</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
         <span class="n">answer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
@@ -637,30 +967,62 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Expected &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expected_len</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; in output. Got &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)))</span></div>
 
+    <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set submit command.&quot;&quot;&quot;</span>
+        <span class="n">submit_vars</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">submit_variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">submit_vars</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;--export </span><span class="si">{key}</span><span class="s2">=</span><span class="si">{val}</span><span class="s2"> </span><span class="si">{submit_vars}</span><span class="s2">&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.batch_sub}</span><span class="s2"> </span><span class="si">{submit_vars}</span><span class="s2"> </span><span class="si">{self.task_settings.ecf_job_at_host}</span><span class="s2">&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">remote_submit_cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">submit_cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+
 <div class="viewcode-block" id="SlurmSubmission.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.SlurmSubmission.set_job_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -J &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div></div>
 
 
 <div class="viewcode-block" id="GridEngineSubmission"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission">[docs]</a><span class="k">class</span> <span class="nc">GridEngineSubmission</span><span class="p">(</span><span class="n">BatchSubmission</span><span class="p">):</span>
-<div class="viewcode-block" id="GridEngineSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;qsub&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;qstat -j&quot;</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;qdel&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#$&quot;</span><span class="p">):</span>
-        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Sun Grid Engine (SGE) job submission.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        BatchSubmission (_type_): _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GridEngineSubmission.__init__"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="s2">&quot;qsub&quot;</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;qstat -j&quot;</span><span class="p">,</span>
+                 <span class="n">kill</span><span class="o">=</span><span class="s2">&quot;qdel&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;#$&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct the GridEngineSubmission object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            task (scheduler.EcflowTask): Task</span>
+<span class="sd">            task_settings (TaskSettings): Task settings</span>
+<span class="sd">            server (scheduler.Server): Server.</span>
+<span class="sd">            db_file (_type_, optional):  Data base for monitoring. Defaults to None.</span>
+<span class="sd">            sub (str, optional): Sumission command. Defaults to &quot;qsub&quot;.</span>
+<span class="sd">            stat (str, optional): Status command. Defaults to &quot;qstat -j&quot;.</span>
+<span class="sd">            kill (str, optional): Kill command. Defaults to &quot;qdel&quot;.</span>
+<span class="sd">            prefix (str, optional): SGE prefix. Defaults to &quot;#$&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BatchSubmission</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">task_settings</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">db_file</span><span class="o">=</span><span class="n">db_file</span><span class="p">,</span> <span class="n">sub</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span>
+                                 <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span> <span class="n">kill</span><span class="o">=</span><span class="n">kill</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">ecf_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="GridEngineSubmission.set_output"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission.set_output">[docs]</a>    <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set output.&quot;&quot;&quot;</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">ecf_jobout_at_host</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -o &quot;</span> <span class="o">+</span> <span class="n">logfile</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -e &quot;</span> <span class="o">+</span> <span class="n">logfile</span>
         <span class="k">return</span> <span class="n">string</span></div>
 
 <div class="viewcode-block" id="GridEngineSubmission.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission.set_jobid">[docs]</a>    <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Set job id.&quot;&quot;&quot;</span>
         <span class="c1"># Your job XXXXXX (&quot;name&quot;) has been submitted</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
-        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file_handler</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
         <span class="n">answer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
@@ -676,6 +1038,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Expected &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">expected_len</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; in output. Got &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="GridEngineSubmission.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.GridEngineSubmission.set_job_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set job name.&quot;&quot;&quot;</span>
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_prefix</span> <span class="o">+</span> <span class="s2">&quot; -N &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">string</span></div></div>
 </pre></div>
@@ -695,7 +1058,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -713,7 +1076,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>
