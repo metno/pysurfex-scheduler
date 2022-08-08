@@ -316,7 +316,7 @@ class SubmitException(Exception):
             task (scheduler.EcflowTask): Task.
             task_settings (TaskSettings): Task settings.
         """
-        Exception.__init__()
+        Exception().__init__()
         logfile = task.create_submission_log(task_settings.joboutdir)
         with open(logfile, mode="a", encoding="utf-8") as file_handler:
             file_handler.write(msg)
@@ -336,7 +336,7 @@ class KillException(Exception):
             task (scheduler.EcflowTask): Task.
             task_settings (TaskSettings): Task settings.
         """
-        Exception.__init__()
+        Exception().__init__()
         logfile = task.create_kill_log(task_settings.joboutdir)
         with open(logfile, mode="a", encoding="utf-8") as file_handler:
             file_handler.write(msg)
@@ -357,7 +357,7 @@ class StatusException(Exception):
             task_settings (TaskSettings): Task settings
 
         """
-        Exception.__init__()
+        Exception().__init__()
         # joboutdir = task.joboutdir
         logfile = task.create_status_log(task_settings.joboutdir)
         with open(logfile, mode="a", encoding="utf-8") as file_handler:
