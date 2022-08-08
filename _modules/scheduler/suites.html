@@ -167,13 +167,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">save_as_defs</span><span class="p">(</span><span class="n">def_file</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="EcflowNode"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode">[docs]</a><span class="k">class</span> <span class="nc">EcflowNode</span><span class="p">():</span>
+<span class="k">class</span> <span class="nc">EcflowNode</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;A Node class is the abstract base class for Suite, Family and Task.</span>
 
 <span class="sd">    Every Node instance has a name, and a path relative to a suite</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EcflowNode.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct the EcflowNode.</span>
 
 <span class="sd">        Args:</span>
@@ -233,9 +233,9 @@
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">def_status</span><span class="p">,</span> <span class="n">ecflow</span><span class="o">.</span><span class="n">Defstatus</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ecf_node</span><span class="o">.</span><span class="n">add_defstatus</span><span class="p">(</span><span class="n">def_status</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown defstatus&quot;</span><span class="p">)</span></div>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown defstatus&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EcflowNode.add_part_trigger"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNode.add_part_trigger">[docs]</a>    <span class="k">def</span> <span class="nf">add_part_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_part_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triggers</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a part trigger.</span>
 
 <span class="sd">        Args:</span>
@@ -252,17 +252,17 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Empty trigger&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Triggers must be a Triggers object&quot;</span><span class="p">)</span></div></div>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Triggers must be a Triggers object&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="EcflowNodeContainer"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNodeContainer">[docs]</a><span class="k">class</span> <span class="nc">EcflowNodeContainer</span><span class="p">(</span><span class="n">EcflowNode</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EcflowNodeContainer</span><span class="p">(</span><span class="n">EcflowNode</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Ecflow node container.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        EcflowNode (EcflowNode): Parent class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EcflowNodeContainer.__init__"><a class="viewcode-back" href="../../index.html#scheduler.EcflowNodeContainer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct EcflowNodeContainer.</span>
 
 <span class="sd">        Args:</span>
@@ -271,7 +271,7 @@
 <span class="sd">            parent (EcflowNode): Parent to this node.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">EcflowNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="n">EcflowNode</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="EcflowSuite"><a class="viewcode-back" href="../../index.html#scheduler.EcflowSuite">[docs]</a><span class="k">class</span> <span class="nc">EcflowSuite</span><span class="p">(</span><span class="n">EcflowNodeContainer</span><span class="p">):</span>
@@ -490,7 +490,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

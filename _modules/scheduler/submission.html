@@ -354,7 +354,7 @@
 <span class="sd">            task (scheduler.EcflowTask): Task.</span>
 <span class="sd">            task_settings (TaskSettings): Task settings.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="ne">Exception</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_submission_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
             <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -374,7 +374,7 @@
 <span class="sd">            task (scheduler.EcflowTask): Task.</span>
 <span class="sd">            task_settings (TaskSettings): Task settings.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="ne">Exception</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_kill_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
             <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -395,7 +395,7 @@
 <span class="sd">            task_settings (TaskSettings): Task settings</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="ne">Exception</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="ne">Exception</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># joboutdir = task.joboutdir</span>
         <span class="n">logfile</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">create_status_log</span><span class="p">(</span><span class="n">task_settings</span><span class="o">.</span><span class="n">joboutdir</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
@@ -436,7 +436,7 @@
     <span class="k">return</span> <span class="n">sub</span></div>
 
 
-<div class="viewcode-block" id="SubmissionBaseClass"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass">[docs]</a><span class="k">class</span> <span class="nc">SubmissionBaseClass</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SubmissionBaseClass</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An abstract class for submssion to be implemented by all children.</span>
 
 <span class="sd">    Args:</span>
@@ -474,7 +474,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_kill_cmd</span> <span class="o">=</span> <span class="n">remote_kill_cmd</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_status_cmd</span> <span class="o">=</span> <span class="n">remote_status_cmd</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.update_db"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.update_db">[docs]</a>    <span class="k">def</span> <span class="nf">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the data base.</span>
 
 <span class="sd">        Args:</span>
@@ -482,15 +482,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handler</span><span class="p">:</span>
-                <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">job_id</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+                <span class="n">file_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">job_id</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.clear_db"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.clear_db">[docs]</a>    <span class="k">def</span> <span class="nf">clear_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">clear_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove database.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">)</span></div>
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_file</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_submit_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_submit_cmd">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_submit_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set submit command.</span>
 
@@ -500,9 +500,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_jobid"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_jobid">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_jobid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set job id.</span>
 
@@ -512,9 +512,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.get_logfile"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.get_logfile">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set logfile.</span>
 
@@ -524,9 +524,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.submit_job"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.submit_job">[docs]</a>    <span class="k">def</span> <span class="nf">submit_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">submit_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Submit job.</span>
 
 <span class="sd">        Raises:</span>
@@ -555,9 +555,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_jobid</span><span class="p">()</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="n">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span></div>
+                <span class="n">SubmissionBaseClass</span><span class="o">.</span><span class="n">update_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.kill_job"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.kill_job">[docs]</a>    <span class="k">def</span> <span class="nf">kill_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">kill_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kill task.</span>
 
 <span class="sd">        Raises:</span>
@@ -587,9 +587,9 @@
             <span class="n">log_handler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
             <span class="n">log_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">*** KILLED BY ECF_kill ****&quot;</span><span class="p">)</span>
             <span class="n">log_handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-            <span class="n">log_handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+            <span class="n">log_handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_job_status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_job_status">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
         <span class="sd">&quot;&quot;&quot;Set job status.</span>
 
@@ -599,9 +599,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;General status method.</span>
 
 <span class="sd">        Raises:</span>
@@ -623,9 +623,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">job_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">StatusException</span><span class="p">(</span><span class="s2">&quot;Status command failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span></div>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.job_status"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.job_status">[docs]</a>    <span class="k">def</span> <span class="nf">job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">job_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;General job status method.</span>
 
 <span class="sd">        Raises:</span>
@@ -640,9 +640,9 @@
                 <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span>
             <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Status command failed with error code &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span></div>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Status command failed with error code &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.kill"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;General kill method.</span>
 
 <span class="sd">        Raises:</span>
@@ -665,9 +665,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">kill_job</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">KillException</span><span class="p">(</span><span class="s2">&quot;Kill failed &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">,</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span></div>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">task_settings</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_kill_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_kill_cmd">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_kill_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set kill command.</span>
 
@@ -677,9 +677,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_remote_cmd"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_remote_cmd">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_remote_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">remote_cmd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set remote command.</span>
 
@@ -688,9 +688,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">remote_cmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="n">remote_cmd</span> <span class="o">+</span> <span class="s2">&quot; </span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
-        <span class="k">return</span> <span class="n">cmd</span></div>
+        <span class="k">return</span> <span class="n">cmd</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_output"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_output">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set output.</span>
 
@@ -700,9 +700,9 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="SubmissionBaseClass.set_job_name"><a class="viewcode-back" href="../../index.html#scheduler.SubmissionBaseClass.set_job_name">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">set_job_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set job name.</span>
 
@@ -712,7 +712,7 @@
 <span class="sd">            NotImplementedError: If not implemented.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <div class="viewcode-block" id="BackgroundSubmission"><a class="viewcode-back" href="../../index.html#scheduler.BackgroundSubmission">[docs]</a><span class="k">class</span> <span class="nc">BackgroundSubmission</span><span class="p">(</span><span class="n">SubmissionBaseClass</span><span class="p">):</span>
@@ -1076,7 +1076,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Trygve Aspelien.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>
